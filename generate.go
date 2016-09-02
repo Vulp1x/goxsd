@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"go/token"
+	"go/types"
 	"io"
 	"strings"
 	"text/template"
@@ -203,25 +205,71 @@ func primitiveType(e *xmlTree) bool {
 	return false
 }
 
+// lint converts XML identifiers to Go identifiers.
+//
+// Valid Go Identifiers:
+// identifier = letter { letter | unicode_digit }
+// See https://golang.org/ref/spec#Identifiers
+//
+// Valid XML Identifiers:
+// See http://www.w3schools.com/xml/xml_elements.asp
+//
+// XML Naming Rules
+// XML elements must follow these naming rules:
+//
+// Element names are case-sensitive
+// Element names must start with a letter or underscore
+// Element names cannot start with the letters xml (or XML, or Xml, etc)
+// Element names can contain letters, digits, hyphens, underscores, and periods
+// Element names cannot contain spaces
+// Any name can be used, no words are reserved (except xml).
 func lint(s string) string {
-	return dashToCamel(squish(initialisms.Replace(s)))
+	if s == "" {
+		// FIXME: is this an error? Why was a default type not set earlier?
+		return "string"
+	}
+
+	// Is the string a Go builtin type?
+	// TODO: This is pulling in two packages to check if the type is a Go builtin. Is this necessary?
+	if t, _ := types.Eval(token.NewFileSet(), nil, 0, s); t.IsType() {
+		return s
+	}
+
+	fields := strings.FieldsFunc(initialisms.Replace(s), func(r rune) bool {
+		// Underscores are valid characters in Go identifiers, but I have not seen it
+		// used often in Go code and without consistency the generated code violates
+		// the principle of least astonishment. It is easier to expect all generated
+		// code to be in CamelCase instead of a potential mixture of Snake/CamelCase.
+		//
+		// FIXME: This transformation introduces a higher risk of name collisions.
+		// Add a check for name collisions and/or add a predictable rule to resolve
+		// name collisions such as appending an incrementing number to the conflicting
+		// identifier.
+		return r == '-' || r == '_' || r == '.'
+	})
+
+	// Convert to Pascal/CamelCase
+	for i := range fields {
+		fields[i] = strings.Title(fields[i])
+	}
+
+	// TODO: if the user has not requested exported types, convert first letter to
+	// lowercase.
+	// This code is meant to handle unicode, but not all all unicode characters have
+	// a lowercase. Use unicode.IsLower() to detect this condition and add a default
+	// lowercase prefix such as an ASCII 'x'.
+	//r, n := utf8.DecodeRuneInString(fields[0])
+	//fields[0] = string(unicode.ToLower(r)) + fields[0][n:]
+
+	return strings.Join(fields, "")
 }
 
 func lintTitle(s string) string {
 	return lint(strings.Title(s))
 }
 
+/*
+TODO: remove. Spaces are not valid in XML identifiers. Is this needed?
 func squish(s string) string {
 	return strings.Replace(s, " ", "", -1)
-}
-
-func dashToCamel(name string) string {
-	s := strings.Split(name, "-")
-	if len(s) > 1 {
-		for i := 1; i < len(s); i++ {
-			s[i] = strings.Title(s[i])
-		}
-		return strings.Join(s, "")
-	}
-	return name
-}
+}*/

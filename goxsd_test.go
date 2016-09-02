@@ -295,7 +295,7 @@ func TestLintTitle(t *testing.T) {
 	}
 }
 
-func TestSquish(t *testing.T) {
+/*func TestSquish(t *testing.T) {
 	for i, tt := range []struct {
 		input, want string
 	}{
@@ -307,9 +307,9 @@ func TestSquish(t *testing.T) {
 			t.Errorf("[%d] squish(%q) = %q, want %q", i, tt.input, got, tt.want)
 		}
 	}
-}
+}*/
 
-func TestReplace(t *testing.T) {
+/*func TestReplace(t *testing.T) {
 	for i, tt := range []struct {
 		input, want string
 	}{
@@ -333,4 +333,4 @@ func TestReplace(t *testing.T) {
 
 		i++
 	}
-}
+}*/

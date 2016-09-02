@@ -292,6 +292,8 @@ func (b *builder) findType(name string) interface{} {
 	case "boolean":
 		return "bool"
 	case "language", "Name", "token", "duration", "anyURI":
+		// FIXME: these types have additional constraints over string.
+		// For example, a token cannot have leading/trailing whitespace.
 		return "string"
 	case "long", "short", "integer", "int":
 		return "int"
