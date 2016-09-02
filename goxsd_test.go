@@ -233,37 +233,50 @@ func removeComments(buf bytes.Buffer) bytes.Buffer {
 }
 
 func TestBuildXmlElem(t *testing.T) {
-	for _, tst := range tests {
+	for i, tst := range tests {
 		schemas, err := parse(strings.NewReader(tst.xsd), "test")
 		if err != nil {
 			t.Fatal(err)
 		}
 
+		if testing.Verbose() {
+			t.Logf("\n%s", pretty.Sprint(schemas))
+		}
+
+		if len(schemas) != 1 {
+			t.Errorf("%d. len(parse(schema)) = %d, want %d", i, len(schemas), 1)
+			continue
+		}
+
 		bldr := newBuilder(schemas)
 		elems := bldr.buildXML()
+		if testing.Verbose() {
+			t.Log(pretty.Sprint(elems))
+		}
 		if len(elems) != 1 {
-			t.Errorf("wrong number of xml elements")
+			t.Errorf("%d. len(bldr.buildXML) = %d, want %d", i, len(elems), 1)
+			continue
 		}
 		e := elems[0]
 		if !reflect.DeepEqual(tst.xml, *e) {
-			t.Errorf("Unexpected XML element: %s", e.Name)
-			pretty.Println(tst.xml)
-			pretty.Println(e)
+			if testing.Verbose() {
+				t.Error(pretty.Sprintf("%d.bldr.buildXML() => %# v, want %# v", i, *e, tst.xml))
+			} else {
+				t.Errorf("%d. Unexpected XML element: %s", i, e.Name)
+			}
 		}
 	}
 }
 
 func TestGenerateGo(t *testing.T) {
-	for _, tst := range tests {
+	for i, tst := range tests {
 		var out bytes.Buffer
 		g := generator{prefix: tst.prefix, exported: tst.exported}
 		g.do(&out, []*xmlTree{&tst.xml})
 		out = removeComments(out)
 		if strings.Join(strings.Fields(out.String()), "") != strings.Join(strings.Fields(tst.gosrc), "") {
-			t.Errorf("Unexpected generated Go source: %s", tst.xml.Name)
-			t.Logf(out.String())
-			t.Logf(strings.Join(strings.Fields(out.String()), ""))
-			t.Logf(strings.Join(strings.Fields(tst.gosrc), ""))
+			t.Errorf("%d.\nhave:\n%s\nwant:\n%s", i, out.Bytes(), tst.gosrc)
+			continue
 		}
 	}
 }

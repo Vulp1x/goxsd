@@ -78,12 +78,13 @@ func main() {
 // - any attributes
 // - if the element contains any character data
 type xmlTree struct {
-	Name     string
-	Type     string
-	List     bool
-	Cdata    bool
-	Attribs  []xmlAttrib
-	Children []*xmlTree
+	Annotation string
+	Name       string
+	Type       string
+	List       bool
+	Cdata      bool
+	Attribs    []xmlAttrib
+	Children   []*xmlTree
 }
 
 type xmlAttrib struct {
@@ -134,7 +135,7 @@ func (b *builder) buildXML() []*xmlTree {
 // buildFromElement builds an xmlTree from an xsdElement, recursively
 // traversing the XSD type information to build up an XML element hierarchy.
 func (b *builder) buildFromElement(e xsdElement) *xmlTree {
-	xelem := &xmlTree{Name: e.Name, Type: e.Name}
+	xelem := &xmlTree{Annotation: e.Annotation, Name: e.Name, Type: e.Name}
 
 	if e.isList() {
 		xelem.List = true
