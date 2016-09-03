@@ -14,22 +14,31 @@ import (
 
 var (
 	// Struct field generated from an element attribute
-	attr = `{{ define "Attr" }}{{ printf "  %s " (lintTitle .Name) }}{{ printf "%s ` + "`xml:\\\"%s,attr\\\"`" + `" (lint .Type) .Name }}
-{{ end }}`
+	// TODO: add omitempty if minOccurences = 0
+	attr = "{{ define \"Attr\" }}{{ (lintTitle .Name) }} {{ (lint .Type) }}  `xml:\"{{ .Name }},attr\"`{{ end }}"
 
 	// Struct field generated from an element child element
-	child = `{{ define "Child" }}{{ printf "  %s " (lintTitle .Name) }}{{ if .List }}[]{{ end }}{{ printf "%s ` + "`xml:\\\"%s\\\"`" + `" (typeName (fieldType .)) .Name }}
-{{ end }}`
+	child = "{{ define \"Child\" }}{{ (lintTitle .Name) }} {{ if .List }}[]{{ end }}{{ (fieldType .) }} `xml:\"{{ .Name }}\"`{{ end }}"
 
 	// Struct field generated from the character data of an element
-	cdata = `{{ define "Cdata" }}{{ printf "Value %s ` + "`xml:\\\",chardata\\\"`" + `" (lint .Type) }}
-{{ end }}`
+	cdata = "{{ define \"Cdata\" }}Value {{ (lint .Type) }} `xml:\",chardata\"`{{ end }}"
 	//	cdata = `{{ define "Cdata" }}{{ printf "%s %s ` + "`xml:\\\",chardata\\\"`" + `" (lintTitle .Name) (lint .Type) }}
 	//{{ end }}`
 
 	// Struct generated from a non-trivial element (with children and/or attributes)
-	elem = `{{ printf "// %s is generated from an XSD element.\ntype %s struct {\n" (typeName .Name) (typeName .Name) }}{{ range $a := .Attribs }}{{ template "Attr" $a }}{{ end }}{{ range $c := .Children }}{{ template "Child" $c }}{{ end }} {{ if .Cdata }}{{ template "Cdata" . }}{{ end }} }
-`
+	//elem = `{{ printf "// %s is generated from an XSD element.\ntype %s struct {\n" (typeName .Name) (typeName .Name) }}{{ range $a := .Attribs }}{{ template "Attr" $a }}{{ end }}{{ range $c := .Children }}{{ template "Child" $c }}{{ end }} {{ if .Cdata }}{{ template "Cdata" . }}{{ end }} }
+	// TODO: Add the Annotation comments for both the Structs and Fields.
+	elem = `
+	// {{ typeName .Name }} is generated from an XSD element.
+	type {{ typeName .Name }} struct {
+		{{- range $a := .Attribs }}
+		{{ template "Attr" $a }}{{ end }}
+		{{- range $c := .Children }}
+		{{ template "Child" $c }}{{ end }}
+		{{- if .Cdata }}
+		{{ template "Cdata" . }}{{ end -}}
+	}
+	`
 )
 
 var (
