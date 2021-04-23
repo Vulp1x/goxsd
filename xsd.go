@@ -28,7 +28,10 @@ func parseXSDFile(fname string) ([]xsdSchema, error) {
 // makeCharsetReader returns special readers as needed for xml encodings, or
 // nil.
 func makeCharsetReader(charset string, input io.Reader) (io.Reader, error) {
-	if charset == "Windows-1252" {
+	switch strings.ToLower(charset) {
+	case "windows-1251":
+		return charmap.Windows1251.NewDecoder().Reader(input), nil
+	case "windows-1252":
 		return charmap.Windows1252.NewDecoder().Reader(input), nil
 	}
 	return nil, fmt.Errorf("Unknown charset: %s", charset)
