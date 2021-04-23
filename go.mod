@@ -1,0 +1,9 @@
+module github.com/danil/goxsd
+
+go 1.16
+
+require (
+	github.com/kr/pretty v0.2.1
+	golang.org/x/text v0.3.6
+	golang.org/x/tools v0.1.0
+)

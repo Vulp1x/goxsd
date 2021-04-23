@@ -1,12 +1,13 @@
 # goxsd
 
+[![Build Status](https://cloud.drone.io/api/badges/danil/goxsd/status.svg)](https://cloud.drone.io/danil/goxsd)
+[![Go Reference](https://pkg.go.dev/badge/github.com/danil/goxsd.svg)](https://pkg.go.dev/github.com/danil/goxsd)
+
 Goxsd is a tool for generating XML decoding Go structs from an [XSD schema](https://www.w3.org/TR/xmlschema11-1) specification. It does not yet implement the full XSD specificaiton, but goes sufficiently far to be useful for at least some use cases.
 
 ## Installation
 
-```
-go get github.com/ivarg/goxsd
-```
+    go install github.com/danil/goxsd@v0.0.1
 
 ## Usage
 
@@ -34,4 +35,3 @@ to an XSD schema.
 * XSD namespaces are currently completely ignored, opening for undefined behavior if two namespaces are parsed with conflicting element- or type names.
 
 * At some point, I would also like to generate validation code, that could check various rules and constraints expressed in the XSD
-
