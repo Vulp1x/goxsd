@@ -1,4 +1,4 @@
-package main
+package goxsd
 
 import (
 	"encoding/xml"
@@ -15,7 +15,7 @@ var (
 	parsedFiles = make(map[string]struct{})
 )
 
-func parseXSDFile(fname string) ([]xsdSchema, error) {
+func ParseXSDFile(fname string) ([]xsdSchema, error) {
 	f, err := os.Open(fname)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func parse(r io.Reader, fname string) ([]xsdSchema, error) {
 		if _, ok := parsedFiles[imp.Location]; ok {
 			continue
 		}
-		s, err := parseXSDFile(filepath.Join(dir, imp.Location))
+		s, err := ParseXSDFile(filepath.Join(dir, imp.Location))
 		if err != nil {
 			return nil, err
 		}

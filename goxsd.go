@@ -2,72 +2,9 @@
 // - enforcing use="restricted" on attributes
 // - namespaces
 
-package main
+package goxsd
 
-import (
-	"flag"
-	"fmt"
-	"log"
-	"os"
-	"strings"
-)
-
-var (
-	output, pckg, prefix string
-	exported             bool
-
-	usage = `Usage: goxsd [options] <xsd_file>
-
-Options:
-  -o <file>     Destination file [default: stdout]
-  -p <package>  Package name [default: goxsd]
-  -e            Generate exported structs [default: false]
-  -x <prefix>   Struct name prefix [default: ""]
-
-goxsd is a tool for generating XML decoding/encoding Go structs, according
-to an XSD schema.
-`
-)
-
-func main() {
-	flag.StringVar(&output, "o", "", "Name of output file")
-	flag.StringVar(&pckg, "p", "goxsd", "Name of the Go package")
-	flag.StringVar(&prefix, "x", "", "Name of the Go package")
-	flag.BoolVar(&exported, "e", false, "Generate exported structs")
-	flag.Parse()
-
-	if len(flag.Args()) != 1 {
-		fmt.Println(usage)
-		os.Exit(1)
-	}
-	xsdFile := flag.Arg(0)
-
-	s, err := parseXSDFile(xsdFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	out := os.Stdout
-	if output != "" {
-		if out, err = os.Create(output); err != nil {
-			fmt.Println("Could not create or truncate output file:", output)
-			os.Exit(1)
-		}
-	}
-
-	bldr := newBuilder(s)
-
-	gen := generator{
-		pkg:      pckg,
-		prefix:   prefix,
-		exported: exported,
-	}
-
-	if err := gen.do(out, bldr.buildXML()); err != nil {
-		fmt.Println("Code generation failed unexpectedly:", err.Error())
-		os.Exit(1)
-	}
-}
+import "strings"
 
 // xmlTree is the representation of an XML element node in a tree. It
 // contains information about whether
@@ -98,9 +35,9 @@ type builder struct {
 	simplTypes map[string]xsdSimpleType
 }
 
-// newBuilder creates a new initialized builder populated with the given
+// NewBuilder creates a new initialized builder populated with the given
 // xsdSchema slice.
-func newBuilder(schemas []xsdSchema) *builder {
+func NewBuilder(schemas []xsdSchema) *builder {
 	return &builder{
 		schemas:    schemas,
 		complTypes: make(map[string]xsdComplexType),
@@ -108,9 +45,9 @@ func newBuilder(schemas []xsdSchema) *builder {
 	}
 }
 
-// buildXML generates and returns a tree of xmlTree objects based on a set of
+// BuildXML generates and returns a tree of xmlTree objects based on a set of
 // parsed XSD schemas.
-func (b *builder) buildXML() []*xmlTree {
+func (b *builder) BuildXML() []*xmlTree {
 	var roots []xsdElement
 	for _, s := range b.schemas {
 		for _, e := range s.Elements {
@@ -301,7 +238,7 @@ func (b *builder) findType(name string) interface{} {
 		return "uint16"
 	case "decimal":
 		return "float64"
-	case "dateTime":
+	case "dateTime", "date":
 		return "time.Time"
 	default:
 		return name

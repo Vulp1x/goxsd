@@ -1,4 +1,4 @@
-package main
+package goxsd
 
 import (
 	"bytes"
@@ -9,12 +9,6 @@ import (
 	"github.com/kr/pretty"
 )
 
-type testCase struct {
-	xsd   string
-	xml   xmlTree
-	gosrc string
-}
-
 var (
 	tests = []struct {
 		exported bool
@@ -23,7 +17,6 @@ var (
 		xml      xmlTree
 		gosrc    string
 	}{
-
 		{
 			exported: false,
 			prefix:   "",
@@ -76,17 +69,15 @@ var (
 				},
 			},
 			gosrc: `
-type titleList struct {
-	Title []title ` + "`xml:\"title\"`" + `
-}
+	type TitleList struct {
+		Title []title ` + "`xml:\"title\"`" + `
+	}
 
-type title struct {
-	Language string ` + "`xml:\"language,attr\"`" + `
-	Original bool ` + "`xml:\"original,attr\"`" + `
-	Title    string ` + "`xml:\",chardata\"`" + `
-}
-
-				`,
+	type Title struct {
+		Language string ` + "`xml:\"language,attr\"`" + `
+		Original bool   ` + "`xml:\"original,attr\"`" + `
+		Value    string ` + "`xml:\",chardata\"`" + `
+	}`,
 		},
 
 		{
@@ -133,15 +124,14 @@ type title struct {
 				},
 			},
 			gosrc: `
-type tagList struct {
-	Tag []tag ` + "`xml:\"tag\"`" + `
-}
+	type TagList struct {
+		Tag []tag ` + "`xml:\"tag\"`" + `
+	}
 
-type tag struct {
-	Type string ` + "`xml:\"type,attr\"`" + `
-	Tag string ` + "`xml:\",chardata\"`" + `
-}
-			`,
+	type Tag struct {
+		Type  string ` + "`xml:\"type,attr\"`" + `
+		Value string ` + "`xml:\",chardata\"`" + `
+	}`,
 		},
 
 		{
@@ -167,11 +157,10 @@ type tag struct {
 				},
 			},
 			gosrc: `
-type tagID struct {
-	Type string ` + "`xml:\"type,attr\"`" + `
-	TagID string ` + "`xml:\",chardata\"`" + `
-}
-			`,
+	type TagID struct {
+		Type  string ` + "`xml:\"type,attr\"`" + `
+		Value string ` + "`xml:\",chardata\"`" + `
+	}`,
 		},
 
 		{
@@ -197,11 +186,10 @@ type tagID struct {
 				},
 			},
 			gosrc: `
-type XxxURL struct {
-	Type string ` + "`xml:\"type,attr\"`" + `
-	URL string ` + "`xml:\",chardata\"`" + `
-}
-			`,
+	type XxxURL struct {
+		Type  string ` + "`xml:\"type,attr\"`" + `
+		Value string ` + "`xml:\",chardata\"`" + `
+	}`,
 		},
 
 		// Windows-1252 encoding
@@ -216,8 +204,7 @@ type XxxURL struct {
 				Type: "empty",
 			},
 			gosrc: `
-type empty struct {}
-			`,
+	type Empty struct {}`,
 		},
 	}
 )
@@ -225,7 +212,7 @@ type empty struct {}
 func removeComments(buf bytes.Buffer) bytes.Buffer {
 	lines := strings.Split(buf.String(), "\n")
 	for i, l := range lines {
-		if strings.HasPrefix(l, "//") {
+		if strings.HasPrefix(strings.TrimSpace(l), "//") {
 			lines = append(lines[:i], lines[i+1:]...)
 		}
 	}
@@ -248,8 +235,8 @@ func TestBuildXmlElem(t *testing.T) {
 			continue
 		}
 
-		bldr := newBuilder(schemas)
-		elems := bldr.buildXML()
+		bldr := NewBuilder(schemas)
+		elems := bldr.BuildXML()
 		if testing.Verbose() {
 			t.Log(pretty.Sprint(elems))
 		}
@@ -271,26 +258,16 @@ func TestBuildXmlElem(t *testing.T) {
 func TestGenerateGo(t *testing.T) {
 	for i, tst := range tests {
 		var out bytes.Buffer
-		g := generator{prefix: tst.prefix, exported: tst.exported}
-		g.do(&out, []*xmlTree{&tst.xml})
-		out = removeComments(out)
-		if strings.Join(strings.Fields(out.String()), "") != strings.Join(strings.Fields(tst.gosrc), "") {
-			t.Errorf("%d.\nhave:\n%s\nwant:\n%s", i, out.Bytes(), tst.gosrc)
+		g := Generator{Prefix: tst.prefix, Exported: tst.exported}
+		err := g.Do(&out, []*xmlTree{&tst.xml})
+		if err != nil {
+			t.Errorf("%d. generator do: %s", i, err)
 			continue
 		}
-	}
-}
-
-func TestLintTitle(t *testing.T) {
-	for i, tt := range []struct {
-		input, want string
-	}{
-		{"foo cpu baz", "FooCPUBaz"},
-		{"test Id", "TestID"},
-		{"json and html", "JSONAndHTML"},
-	} {
-		if got := lintTitle(tt.input); got != tt.want {
-			t.Errorf("[%d] title(%q) = %q, want %q", i, tt.input, got, tt.want)
+		out = removeComments(out)
+		if strings.Join(strings.Fields(out.String()), "") != strings.Join(strings.Fields(tst.gosrc), "") {
+			t.Errorf("%d.\nhave:\n%s\nwant:\n%s", i, out.String(), tst.gosrc)
+			continue
 		}
 	}
 }
@@ -334,3 +311,12 @@ func TestLintTitle(t *testing.T) {
 		i++
 	}
 }*/
+
+func TestParseSubmissionPortal(t *testing.T) {
+	schema, err := ParseXSDFile("testdata/SP.common.xsd")
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Log(pretty.Sprint(schema))
+}

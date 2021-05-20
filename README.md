@@ -7,7 +7,7 @@ Goxsd is a tool for generating XML decoding Go structs from an [XSD schema](http
 
 ## Installation
 
-    go install github.com/danil/goxsd@v0.0.1-r1
+    go install github.com/danil/goxsd@v0.0.1-r2
 
 ## Usage
 
