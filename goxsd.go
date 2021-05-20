@@ -234,6 +234,8 @@ func (b *builder) findType(name string) interface{} {
 		return "string"
 	case "long", "short", "integer", "int":
 		return "int"
+	case "positiveInteger":
+		return "uint"
 	case "unsignedShort":
 		return "uint16"
 	case "decimal":

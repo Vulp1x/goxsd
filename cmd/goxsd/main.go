@@ -9,6 +9,7 @@ import (
 	"github.com/danil/goxsd"
 )
 
+//go:generate sh -c "go run . -p ncbisubmission ../../examples/ncbisubmission/submission-comb.xsd > ../../examples/ncbisubmission/ncbi_submission.go"
 //go:generate sh -c "go run . -p f311sfc0v512 ../../examples/f311sfc0v512/SFC0_512.xsd > ../../examples/f311sfc0v512/f311_sfc0_512.go"
 //go:generate sh -c "go run . -p mvk14201912 ../../examples/mvk14201912/mvk_1.4_201912.xsd > ../../examples/mvk14201912/mvk_1_4_201912.go"
 //go:generate sh -c "go run . -p omu10 ../../examples/omu10/OMU_1.0.xsd > ../../examples/omu10/omu_1_0.go"
