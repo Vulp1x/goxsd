@@ -22,9 +22,7 @@ var (
 	child = "{{ define \"Child\" }}{{ (lintTitle .Name) }} {{ if .List }}[]{{ end }}{{ (fieldType .) }} `xml:\"{{ .Name }}\"`{{ end }}"
 
 	// Struct field generated from the character data of an element
-	cdata = "{{ define \"Cdata\" }}Value {{ (lint .Type) }} `xml:\",chardata\"`{{ end }}"
-	//	cdata = `{{ define "Cdata" }}{{ printf "%s %s ` + "`xml:\\\",chardata\\\"`" + `" (lintTitle .Name) (lint .Type) }}
-	//{{ end }}`
+	cdata = `{{ define "Cdata" }}{{ printf "%s %s ` + "`xml:\\\",chardata\\\"`" + `" (lintTitle .Name) (lint .Type) }}{{ end }}`
 
 	// Struct generated from a non-trivial element (with children and/or attributes)
 	//elem = `{{ printf "// %s is generated from an XSD element.\ntype %s struct {\n" (typeName .Name) (typeName .Name) }}{{ range $a := .Attribs }}{{ template "Attr" $a }}{{ end }}{{ range $c := .Children }}{{ template "Child" $c }}{{ end }} {{ if .Cdata }}{{ template "Cdata" . }}{{ end }} }

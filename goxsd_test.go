@@ -76,7 +76,7 @@ var (
 	type Title struct {
 		Language string ` + "`xml:\"language,attr\"`" + `
 		Original bool   ` + "`xml:\"original,attr\"`" + `
-		Value    string ` + "`xml:\",chardata\"`" + `
+		Title   string ` + "`xml:\",chardata\"`" + `
 	}`,
 		},
 
@@ -129,8 +129,8 @@ var (
 	}
 
 	type Tag struct {
-		Type  string ` + "`xml:\"type,attr\"`" + `
-		Value string ` + "`xml:\",chardata\"`" + `
+		Type string ` + "`xml:\"type,attr\"`" + `
+		Tag  string ` + "`xml:\",chardata\"`" + `
 	}`,
 		},
 
@@ -159,7 +159,7 @@ var (
 			gosrc: `
 	type TagID struct {
 		Type  string ` + "`xml:\"type,attr\"`" + `
-		Value string ` + "`xml:\",chardata\"`" + `
+		TagID string ` + "`xml:\",chardata\"`" + `
 	}`,
 		},
 
@@ -187,8 +187,8 @@ var (
 			},
 			gosrc: `
 	type XxxURL struct {
-		Type  string ` + "`xml:\"type,attr\"`" + `
-		Value string ` + "`xml:\",chardata\"`" + `
+		Type string ` + "`xml:\"type,attr\"`" + `
+		URL  string ` + "`xml:\",chardata\"`" + `
 	}`,
 		},
 

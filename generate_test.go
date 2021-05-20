@@ -13,8 +13,10 @@ func TestLint(t *testing.T) {
 		{"time.Time", "time.Time"},
 		{"time.Time", "time.Time"},
 		{"foo cpu baz", "FooCPUBaz"},
+		{"foo Cpu baz", "FooCPUBaz"},
 		{"test Id", "TestID"},
 		{"json and html", "JSONAndHTML"},
+		{"Json and Html", "JSONAndHTML"},
 	} {
 		if got := lint(tt.input); got != tt.want {
 			t.Errorf("[%d] title(%q) = %q, want %q", i, tt.input, got, tt.want)
