@@ -25,11 +25,10 @@ var (
 	cdata = `{{ define "Cdata" }}{{ printf "%s %s ` + "`xml:\\\",cdata\\\"`" + `" (lintTitle .Name) (lint .Type) }}{{ end }}`
 
 	// Struct generated from a non-trivial element (with children and/or attributes)
-	//elem = `{{ printf "// %s is generated from an XSD element.\ntype %s struct {\n" (typeName .Name) (typeName .Name) }}{{ range $a := .Attribs }}{{ template "Attr" $a }}{{ end }}{{ range $c := .Children }}{{ template "Child" $c }}{{ end }} {{ if .Cdata }}{{ template "Cdata" . }}{{ end }} }
 	// TODO: Add the Annotation comments for both the Structs and Fields.
 	elem = `
-	// {{ typeName .Name }} is generated from an XSD element.
-	type {{ typeName .Name }} struct {
+	// {{ typeName .StructName }} is generated from an XSD element.
+	type {{ typeName .StructName }} struct {
 		{{- range $a := .Attribs }}
 		{{ template "Attr" $a }}{{ end }}
 		{{- range $c := .Children }}
@@ -134,13 +133,21 @@ func (g Generator) Do(out io.Writer, roots []*xmlTree) error {
 }
 
 func (g Generator) execute(root *xmlTree, tt *template.Template, out io.Writer) error {
-	if _, ok := g.types[root.Name]; ok {
+	root.StructName = root.Type
+
+	if goPrimitiveType(root.Type) {
+		root.StructName = root.Name
+	}
+
+	if _, ok := g.types[root.StructName]; ok {
 		return nil
 	}
+
 	if err := tt.Execute(out, root); err != nil {
 		return err
 	}
-	g.types[root.Name] = struct{}{}
+
+	g.types[root.StructName] = struct{}{}
 
 	for _, e := range root.Children {
 		if !primitiveType(e) {

@@ -97,6 +97,7 @@ type xsdElement struct {
 	Annotation  string          `xml:"annotation>documentation"`
 	ComplexType *xsdComplexType `xml:"complexType"` // inline complex type
 	SimpleType  *xsdSimpleType  `xml:"simpleType"`  // inline simple type
+	Choice      bool            `xml:"-"`
 }
 
 func (e xsdElement) isList() bool {
@@ -104,7 +105,7 @@ func (e xsdElement) isList() bool {
 }
 
 func (e xsdElement) omittable() bool {
-	return e.Min == "0"
+	return e.Min == "0" || e.Choice
 }
 
 func (e xsdElement) inlineType() bool {
@@ -116,6 +117,7 @@ type xsdComplexType struct {
 	Abstract       string             `xml:"abstract,attr"`
 	Annotation     string             `xml:"annotation>documentation"`
 	Sequence       []xsdElement       `xml:"sequence>element"`
+	SeqChoice      []xsdElement       `xml:"sequence>choice>element"`
 	Attributes     []xsdAttribute     `xml:"attribute"`
 	ComplexContent *xsdComplexContent `xml:"complexContent"`
 	SimpleContent  *xsdSimpleContent  `xml:"simpleContent"`

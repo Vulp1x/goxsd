@@ -4,7 +4,9 @@
 
 package goxsd
 
-import "strings"
+import (
+	"strings"
+)
 
 // xmlTree is the representation of an XML element node in a tree. It
 // contains information about whether
@@ -15,9 +17,10 @@ import "strings"
 // - any attributes
 // - if the element contains any character data
 type xmlTree struct {
-	Annotation string
 	Name       string
 	Type       string
+	StructName string
+	Annotation string
 	List       bool
 	Cdata      bool
 	OmitEmpty  bool
@@ -35,6 +38,7 @@ type builder struct {
 	schemas    []xsdSchema
 	complTypes map[string]xsdComplexType
 	simplTypes map[string]xsdSimpleType
+	elements   map[string]struct{}
 }
 
 // NewBuilder creates a new initialized builder populated with the given
@@ -44,6 +48,7 @@ func NewBuilder(schemas []xsdSchema) *builder {
 		schemas:    schemas,
 		complTypes: make(map[string]xsdComplexType),
 		simplTypes: make(map[string]xsdSimpleType),
+		elements:   make(map[string]struct{}),
 	}
 }
 
@@ -65,20 +70,38 @@ func (b *builder) BuildXML() []*xmlTree {
 
 	var xelems []*xmlTree
 	for _, e := range roots {
-		xelems = append(xelems, b.buildFromElement(e))
+		xelems = appendXMLElement(xelems, b.buildFromElement, e)
 	}
 
 	return xelems
 }
 
+func appendXMLElement(xmlElems []*xmlTree, build func(xsdElement) (*xmlTree, bool), xsdElem xsdElement) []*xmlTree {
+	xmlElem, ok := build(xsdElem)
+	if !ok {
+		return xmlElems
+	}
+	return append(xmlElems, xmlElem)
+}
+
 // buildFromElement builds an xmlTree from an xsdElement, recursively
 // traversing the XSD type information to build up an XML element hierarchy.
-func (b *builder) buildFromElement(e xsdElement) *xmlTree {
+func (b *builder) buildFromElement(e xsdElement) (*xmlTree, bool) {
+	if _, ok := b.elements[e.Name+e.Type]; ok {
+		return nil, false
+	}
+	b.elements[e.Name+e.Type] = struct{}{}
+
 	if e.Ref != "" {
 		e.Name, e.Type = e.Ref, e.Ref
 	}
 
-	xelem := &xmlTree{Annotation: e.Annotation, Name: e.Name, Type: e.Name}
+	typ := e.Name
+	if e.Type != "" {
+		typ = e.Type
+	}
+
+	xelem := &xmlTree{Name: e.Name, Type: typ, Annotation: e.Annotation}
 
 	if e.isList() {
 		xelem.List = true
@@ -99,20 +122,20 @@ func (b *builder) buildFromElement(e xsdElement) *xmlTree {
 				Restriction: xsdRestriction{Base: t},
 			})
 		}
-		return xelem
+		return xelem, true
 	}
 
 	if e.ComplexType != nil { // inline complex type
 		b.buildFromComplexType(xelem, *e.ComplexType)
-		return xelem
+		return xelem, true
 	}
 
 	if e.SimpleType != nil { // inline simple type
 		b.buildFromSimpleType(xelem, *e.SimpleType)
-		return xelem
+		return xelem, true
 	}
 
-	return xelem
+	return xelem, true
 }
 
 // buildFromComplexType takes an xmlTree and an xsdComplexType, containing
@@ -120,13 +143,21 @@ func (b *builder) buildFromElement(e xsdElement) *xmlTree {
 func (b *builder) buildFromComplexType(xelem *xmlTree, t xsdComplexType) {
 	if t.Choice != nil {
 		for _, e := range t.Choice {
-			xelem.Children = append(xelem.Children, b.buildFromElement(e))
+			e.Choice = true
+			xelem.Children = appendXMLElement(xelem.Children, b.buildFromElement, e)
 		}
 	}
 
 	if t.Sequence != nil { // Does the element have children?
 		for _, e := range t.Sequence {
-			xelem.Children = append(xelem.Children, b.buildFromElement(e))
+			xelem.Children = appendXMLElement(xelem.Children, b.buildFromElement, e)
+		}
+	}
+
+	if t.SeqChoice != nil {
+		for _, e := range t.SeqChoice {
+			e.Choice = true
+			xelem.Children = appendXMLElement(xelem.Children, b.buildFromElement, e)
 		}
 	}
 
@@ -190,13 +221,13 @@ func (b *builder) buildFromExtension(xelem *xmlTree, e *xsdExtension) {
 
 	if e.Sequence != nil {
 		for _, e := range e.Sequence {
-			xelem.Children = append(xelem.Children, b.buildFromElement(e))
+			xelem.Children = appendXMLElement(xelem.Children, b.buildFromElement, e)
 		}
 	}
 
 	if e.All != nil {
 		for _, e := range e.All {
-			xelem.Children = append(xelem.Children, b.buildFromElement(e))
+			xelem.Children = appendXMLElement(xelem.Children, b.buildFromElement, e)
 		}
 	}
 
@@ -270,7 +301,7 @@ func (b *builder) findType(name string) interface{} {
 		return "string"
 	case "long", "short", "integer", "int":
 		return "int"
-	case "positiveInteger":
+	case "positiveInteger", "nonNegativeInteger":
 		return "uint"
 	case "unsignedShort":
 		return "uint16"

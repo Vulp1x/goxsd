@@ -6,117 +6,143 @@ import "time"
 
 // СписокРешений is generated from an XSD element.
 type СписокРешений struct {
-	ВерсияФормата           string                   `xml:"ВерсияФормата"`
-	ДатаСписка              time.Time                `xml:"ДатаСписка"`
-	ДатаПредыдущегоСписка   *time.Time               `xml:"ДатаПредыдущегоСписка,omitempty"`
-	СписокАктуальныхРешений СписокАктуальныхРешений  `xml:"СписокАктуальныхРешений"`
-	СписокОтмененныхРешений *СписокОтмененныхРешений `xml:"СписокОтмененныхРешений,omitempty"`
+	ВерсияФормата           string                      `xml:"ВерсияФормата"`
+	ДатаСписка              time.Time                   `xml:"ДатаСписка"`
+	ДатаПредыдущегоСписка   *time.Time                  `xml:"ДатаПредыдущегоСписка,omitempty"`
+	СписокАктуальныхРешений СписокАктуальныхРешенийТип  `xml:"СписокАктуальныхРешений"`
+	СписокОтмененныхРешений *СписокОтмененныхРешенийТип `xml:"СписокОтмененныхРешений,omitempty"`
 }
 
-// СписокАктуальныхРешений is generated from an XSD element.
-type СписокАктуальныхРешений struct {
-	Решение []Решение `xml:"Решение"`
+// СписокАктуальныхРешенийТип is generated from an XSD element.
+type СписокАктуальныхРешенийТип struct {
+	Решение []РешениеТип `xml:"Решение"`
 }
 
-// Решение is generated from an XSD element.
-type Решение struct {
-	ТипРешения      ТипРешения       `xml:"ТипРешения"`
-	НомерРешения    string           `xml:"НомерРешения"`
-	ДатаРешения     time.Time        `xml:"ДатаРешения"`
-	Орган           string           `xml:"Орган"`
-	ВидРешения      ВидРешения       `xml:"ВидРешения"`
-	СписокСубъектов *СписокСубъектов `xml:"СписокСубъектов,omitempty"`
+// РешениеТип is generated from an XSD element.
+type РешениеТип struct {
+	ТипРешения      СправочникТип       `xml:"ТипРешения"`
+	НомерРешения    string              `xml:"НомерРешения"`
+	ДатаРешения     time.Time           `xml:"ДатаРешения"`
+	Орган           string              `xml:"Орган"`
+	ВидРешения      СправочникТип       `xml:"ВидРешения"`
+	СписокСубъектов *СписокСубъектовТип `xml:"СписокСубъектов,omitempty"`
 }
 
-// ТипРешения is generated from an XSD element.
-type ТипРешения struct {
+// СправочникТип is generated from an XSD element.
+type СправочникТип struct {
 	Идентификатор int    `xml:"Идентификатор"`
 	Наименование  string `xml:"Наименование"`
 }
 
-// ВидРешения is generated from an XSD element.
-type ВидРешения struct {
-	Идентификатор int    `xml:"Идентификатор"`
-	Наименование  string `xml:"Наименование"`
+// СписокСубъектовТип is generated from an XSD element.
+type СписокСубъектовТип struct {
+	Субъект []СубъектТип `xml:"Субъект,omitempty"`
 }
 
-// СписокСубъектов is generated from an XSD element.
-type СписокСубъектов struct {
-	Субъект []Субъект `xml:"Субъект,omitempty"`
+// СубъектТип is generated from an XSD element.
+type СубъектТип struct {
+	ИдСубъекта        string            `xml:"ИдСубъекта"`
+	ТипСубъекта       СправочникТип     `xml:"ТипСубъекта"`
+	СписокАдресов     *СписокАдресовТип `xml:"СписокАдресов,omitempty"`
+	РешениеПоСубъекту *string           `xml:"РешениеПоСубъекту,omitempty"`
+	Примечание        *string           `xml:"Примечание,omitempty"`
+	ФЛ                *ФЛТип            `xml:"ФЛ,omitempty"`
+	ЮЛ                *ЮЛТип            `xml:"ЮЛ,omitempty"`
 }
 
-// Субъект is generated from an XSD element.
-type Субъект struct {
-	ИдСубъекта        string         `xml:"ИдСубъекта"`
-	ТипСубъекта       ТипСубъекта    `xml:"ТипСубъекта"`
-	СписокАдресов     *СписокАдресов `xml:"СписокАдресов,omitempty"`
-	РешениеПоСубъекту *string        `xml:"РешениеПоСубъекту,omitempty"`
-	Примечание        *string        `xml:"Примечание,omitempty"`
+// СписокАдресовТип is generated from an XSD element.
+type СписокАдресовТип struct {
+	Адрес []АдресТип `xml:"Адрес"`
 }
 
-// ТипСубъекта is generated from an XSD element.
-type ТипСубъекта struct {
-	Идентификатор int    `xml:"Идентификатор"`
-	Наименование  string `xml:"Наименование"`
+// АдресТип is generated from an XSD element.
+type АдресТип struct {
+	НормАдрес            *СправочникТип `xml:"НормАдрес,omitempty"`
+	ТипАдреса            СправочникТип  `xml:"ТипАдреса"`
+	ТекстАдреса          string         `xml:"ТекстАдреса"`
+	ИдентификаторФИАС    *string        `xml:"ИдентификаторФИАС,omitempty"`
+	УровеньАдреснОбъекта *int           `xml:"УровеньАдреснОбъекта,omitempty"`
+	Страна               *СтранаТип     `xml:"Страна,omitempty"`
+	Индекс               *string        `xml:"Индекс,omitempty"`
+	ОКАТО                *string        `xml:"ОКАТО,omitempty"`
+	Регион               *string        `xml:"Регион,omitempty"`
+	АвтономныйОкруг      *string        `xml:"АвтономныйОкруг,omitempty"`
+	Район                *string        `xml:"Район,omitempty"`
+	Город                *string        `xml:"Город,omitempty"`
+	ВнутригородскРайон   *string        `xml:"ВнутригородскРайон,omitempty"`
+	НаселПункт           *string        `xml:"НаселПункт,omitempty"`
+	Улица                *string        `xml:"Улица,omitempty"`
+	Дом                  *string        `xml:"Дом,omitempty"`
+	Корпус               *string        `xml:"Корпус,omitempty"`
+	Строение             *string        `xml:"Строение,omitempty"`
+	Помещение            *string        `xml:"Помещение,omitempty"`
 }
 
-// СписокАдресов is generated from an XSD element.
-type СписокАдресов struct {
-	Адрес []Адрес `xml:"Адрес"`
-}
-
-// Адрес is generated from an XSD element.
-type Адрес struct {
-	НормАдрес            *НормАдрес `xml:"НормАдрес,omitempty"`
-	ТипАдреса            ТипАдреса  `xml:"ТипАдреса"`
-	ТекстАдреса          string     `xml:"ТекстАдреса"`
-	ИдентификаторФИАС    *string    `xml:"ИдентификаторФИАС,omitempty"`
-	УровеньАдреснОбъекта *int       `xml:"УровеньАдреснОбъекта,omitempty"`
-	Страна               *Страна    `xml:"Страна,omitempty"`
-	Индекс               *string    `xml:"Индекс,omitempty"`
-	ОКАТО                *string    `xml:"ОКАТО,omitempty"`
-	Регион               *string    `xml:"Регион,omitempty"`
-	АвтономныйОкруг      *string    `xml:"АвтономныйОкруг,omitempty"`
-	Район                *string    `xml:"Район,omitempty"`
-	Город                *string    `xml:"Город,omitempty"`
-	ВнутригородскРайон   *string    `xml:"ВнутригородскРайон,omitempty"`
-	НаселПункт           *string    `xml:"НаселПункт,omitempty"`
-	Улица                *string    `xml:"Улица,omitempty"`
-	Дом                  *string    `xml:"Дом,omitempty"`
-	Корпус               *string    `xml:"Корпус,omitempty"`
-	Строение             *string    `xml:"Строение,omitempty"`
-	Помещение            *string    `xml:"Помещение,omitempty"`
-}
-
-// НормАдрес is generated from an XSD element.
-type НормАдрес struct {
-	Идентификатор int    `xml:"Идентификатор"`
-	Наименование  string `xml:"Наименование"`
-}
-
-// ТипАдреса is generated from an XSD element.
-type ТипАдреса struct {
-	Идентификатор int    `xml:"Идентификатор"`
-	Наименование  string `xml:"Наименование"`
-}
-
-// Страна is generated from an XSD element.
-type Страна struct {
+// СтранаТип is generated from an XSD element.
+type СтранаТип struct {
 	Наименование string  `xml:"Наименование"`
 	Код          *string `xml:"Код,omitempty"`
 }
 
-// СписокОтмененныхРешений is generated from an XSD element.
-type СписокОтмененныхРешений struct {
-	ОтмененноеРешение []ОтмененноеРешение `xml:"ОтмененноеРешение,omitempty"`
+// ФЛТип is generated from an XSD element.
+type ФЛТип struct {
+	ФИО                  string                     `xml:"ФИО"`
+	Фамилия              *string                    `xml:"Фамилия,omitempty"`
+	Имя                  *string                    `xml:"Имя,omitempty"`
+	Отчество             *string                    `xml:"Отчество,omitempty"`
+	ФИОЛат               *string                    `xml:"ФИОЛат,omitempty"`
+	ДатаРождения         *time.Time                 `xml:"ДатаРождения,omitempty"`
+	ГодРождения          *string                    `xml:"ГодРождения,omitempty"`
+	МестоРождения        *string                    `xml:"МестоРождения,omitempty"`
+	ИНН                  *string                    `xml:"ИНН,omitempty"`
+	СНИЛС                *string                    `xml:"СНИЛС,omitempty"`
+	СписокДокументов     *СписокДокументовТип       `xml:"СписокДокументов,omitempty"`
+	СписокДрНаименований *СписокДрНаименованийФЛТип `xml:"СписокДрНаименований,omitempty"`
 }
 
-// ОтмененноеРешение is generated from an XSD element.
-type ОтмененноеРешение struct {
-	ТипРешения      ТипРешения       `xml:"ТипРешения"`
-	НомерРешения    string           `xml:"НомерРешения"`
-	ДатаРешения     time.Time        `xml:"ДатаРешения"`
-	Орган           string           `xml:"Орган"`
-	ВидРешения      ВидРешения       `xml:"ВидРешения"`
-	СписокСубъектов *СписокСубъектов `xml:"СписокСубъектов,omitempty"`
+// СписокДокументовТип is generated from an XSD element.
+type СписокДокументовТип struct {
+	Документ []ДокументТип `xml:"Документ,omitempty"`
+}
+
+// ДокументТип is generated from an XSD element.
+type ДокументТип struct {
+	ТипДокумента            СправочникТип `xml:"ТипДокумента"`
+	Серия                   *string       `xml:"Серия,omitempty"`
+	Номер                   *string       `xml:"Номер,omitempty"`
+	ОрганВыдачи             *string       `xml:"ОрганВыдачи,omitempty"`
+	ДатаВыдачи              *time.Time    `xml:"ДатаВыдачи,omitempty"`
+	ДатаС                   *time.Time    `xml:"ДатаС,omitempty"`
+	ДатаПо                  *time.Time    `xml:"ДатаПо,omitempty"`
+	ПризнакДействительности *bool         `xml:"ПризнакДействительности,omitempty"`
+}
+
+// СписокДрНаименованийФЛТип is generated from an XSD element.
+type СписокДрНаименованийФЛТип struct {
+	ДрНаименование []ДрНаименованиеФЛТип `xml:"ДрНаименование,omitempty"`
+}
+
+// ДрНаименованиеФЛТип is generated from an XSD element.
+type ДрНаименованиеФЛТип struct{}
+
+// ЮЛТип is generated from an XSD element.
+type ЮЛТип struct {
+	НаименованиеЛат      *string                    `xml:"НаименованиеЛат,omitempty"`
+	ДатаРегистрации      *time.Time                 `xml:"ДатаРегистрации,omitempty"`
+	МестоРегистрации     *string                    `xml:"МестоРегистрации,omitempty"`
+	ОГРН                 *string                    `xml:"ОГРН,omitempty"`
+	СписокДрНаименований *СписокДрНаименованийЮЛТип `xml:"СписокДрНаименований,omitempty"`
+}
+
+// СписокДрНаименованийЮЛТип is generated from an XSD element.
+type СписокДрНаименованийЮЛТип struct {
+	ДрНаименование []ДрНаименованиеЮЛТип `xml:"ДрНаименование"`
+}
+
+// ДрНаименованиеЮЛТип is generated from an XSD element.
+type ДрНаименованиеЮЛТип struct{}
+
+// СписокОтмененныхРешенийТип is generated from an XSD element.
+type СписокОтмененныхРешенийТип struct {
+	ОтмененноеРешение []РешениеТип `xml:"ОтмененноеРешение,omitempty"`
 }

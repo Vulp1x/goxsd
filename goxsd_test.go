@@ -55,7 +55,7 @@ var (
 </schema>`,
 			xml: xmlTree{
 				Name: "titleList",
-				Type: "titleList",
+				Type: "titleListType",
 				Children: []*xmlTree{
 					&xmlTree{
 						Name:      "titleType",
@@ -79,7 +79,7 @@ var (
 				},
 			},
 			gosrc: `
-	type TitleList struct {
+	type TitleListType struct {
 		TitleType *TitleType ` + "`xml:\"titleType,omitempty\"`" + `
 		Title     []Title ` + "`xml:\"title\"`" + `
 	}
@@ -218,10 +218,10 @@ var (
 	</schema>`,
 			xml: xmlTree{
 				Name: "empty",
-				Type: "empty",
+				Type: "tagReferenceType",
 			},
 			gosrc: `
-	type Empty struct {}`,
+	type TagReferenceType struct {}`,
 		},
 	}
 )
