@@ -25,6 +25,7 @@ var (
 	</element>
 	<complexType name="titleListType">
 		<sequence>
+			<element ref="titleType" minOccurs="0" />
 			<element name="title" type="originalTitleType" maxOccurs="unbounded" />
 		</sequence>
 	</complexType>
@@ -57,6 +58,15 @@ var (
 				Type: "titleList",
 				Children: []*xmlTree{
 					&xmlTree{
+						Name:      "titleType",
+						Type:      "string",
+						Cdata:     true,
+						OmitEmpty: true,
+						Attribs: []xmlAttrib{
+							{Name: "language", Type: "string"},
+						},
+					},
+					&xmlTree{
 						Name:  "title",
 						Type:  "string",
 						Cdata: true,
@@ -70,7 +80,13 @@ var (
 			},
 			gosrc: `
 	type TitleList struct {
-		Title []Title ` + "`xml:\"title\"`" + `
+		TitleType *TitleType ` + "`xml:\"titleType,omitempty\"`" + `
+		Title     []Title ` + "`xml:\"title\"`" + `
+	}
+
+	type TitleType struct {
+		Language  string ` + "`xml:\"language,attr\"`" + `
+		TitleType string ` + "`xml:\",cdata\"`" + `
 	}
 
 	type Title struct {

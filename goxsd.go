@@ -52,12 +52,12 @@ func NewBuilder(schemas []xsdSchema) *builder {
 func (b *builder) BuildXML() []*xmlTree {
 	var roots []xsdElement
 	for _, s := range b.schemas {
-		for _, e := range s.Elements {
-			roots = append(roots, e)
-		}
+		roots = append(roots, s.Elements...)
+
 		for _, t := range s.ComplexTypes {
 			b.complTypes[t.Name] = t
 		}
+
 		for _, t := range s.SimpleTypes {
 			b.simplTypes[t.Name] = t
 		}
@@ -74,6 +74,10 @@ func (b *builder) BuildXML() []*xmlTree {
 // buildFromElement builds an xmlTree from an xsdElement, recursively
 // traversing the XSD type information to build up an XML element hierarchy.
 func (b *builder) buildFromElement(e xsdElement) *xmlTree {
+	if e.Ref != "" {
+		e.Name, e.Type = e.Ref, e.Ref
+	}
+
 	xelem := &xmlTree{Annotation: e.Annotation, Name: e.Name, Type: e.Name}
 
 	if e.isList() {

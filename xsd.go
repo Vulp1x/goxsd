@@ -90,6 +90,7 @@ type xsdImport struct {
 type xsdElement struct {
 	Name        string          `xml:"name,attr"`
 	Type        string          `xml:"type,attr"`
+	Ref         string          `xml:"ref,attr"`
 	Default     string          `xml:"default,attr"`
 	Min         string          `xml:"minOccurs,attr"`
 	Max         string          `xml:"maxOccurs,attr"`
@@ -107,7 +108,7 @@ func (e xsdElement) omittable() bool {
 }
 
 func (e xsdElement) inlineType() bool {
-	return e.Type == ""
+	return e.Type == "" && e.Ref == ""
 }
 
 type xsdComplexType struct {

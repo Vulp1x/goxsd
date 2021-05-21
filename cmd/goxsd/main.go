@@ -50,11 +50,15 @@ func main() {
 	}
 
 	out := os.Stdout
+
 	if output != "" {
-		if out, err = os.Create(output); err != nil {
+		out, err = os.Create(output)
+		if err != nil {
 			fmt.Println("Could not create or truncate output file:", output)
 			os.Exit(1)
 		}
+
+		defer out.Close()
 	}
 
 	bldr := goxsd.NewBuilder(s)
@@ -65,8 +69,14 @@ func main() {
 		Exported: exported,
 	}
 
-	if err := gen.Do(out, bldr.BuildXML()); err != nil {
+	err = gen.Do(out, bldr.BuildXML())
+	if err != nil {
 		fmt.Println("Code generation failed unexpectedly:", err.Error())
+
+		if output != "" {
+			os.Remove(output)
+		}
+
 		os.Exit(1)
 	}
 }
