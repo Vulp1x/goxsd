@@ -102,6 +102,10 @@ func (e xsdElement) isList() bool {
 	return e.Max == "unbounded"
 }
 
+func (e xsdElement) omittable() bool {
+	return e.Min == "0"
+}
+
 func (e xsdElement) inlineType() bool {
 	return e.Type == ""
 }
@@ -133,10 +137,11 @@ type xsdExtension struct {
 }
 
 type xsdAttribute struct {
-	Name       string `xml:"name,attr"`
-	Type       string `xml:"type,attr"`
-	Use        string `xml:"use,attr"`
-	Annotation string `xml:"annotation>documentation"`
+	Name       string         `xml:"name,attr"`
+	Type       string         `xml:"type,attr"`
+	Use        string         `xml:"use,attr"`
+	Annotation string         `xml:"annotation>documentation"`
+	SimpleType *xsdSimpleType `xml:"simpleType"`
 }
 
 type xsdSimpleType struct {

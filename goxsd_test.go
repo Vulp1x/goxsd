@@ -70,13 +70,13 @@ var (
 			},
 			gosrc: `
 	type TitleList struct {
-		Title []title ` + "`xml:\"title\"`" + `
+		Title []Title ` + "`xml:\"title\"`" + `
 	}
 
 	type Title struct {
 		Language string ` + "`xml:\"language,attr\"`" + `
 		Original bool   ` + "`xml:\"original,attr\"`" + `
-		Title   string ` + "`xml:\",chardata\"`" + `
+		Title    string ` + "`xml:\",cdata\"`" + `
 	}`,
 		},
 
@@ -113,10 +113,11 @@ var (
 				Type: "tagList",
 				Children: []*xmlTree{
 					&xmlTree{
-						Name:  "tag",
-						Type:  "string",
-						List:  true,
-						Cdata: true,
+						Name:      "tag",
+						Type:      "string",
+						List:      true,
+						Cdata:     true,
+						OmitEmpty: true,
 						Attribs: []xmlAttrib{
 							{Name: "type", Type: "string"},
 						},
@@ -125,12 +126,12 @@ var (
 			},
 			gosrc: `
 	type TagList struct {
-		Tag []tag ` + "`xml:\"tag\"`" + `
+		Tag []Tag ` + "`xml:\"tag,omitempty\"`" + `
 	}
 
 	type Tag struct {
 		Type string ` + "`xml:\"type,attr\"`" + `
-		Tag  string ` + "`xml:\",chardata\"`" + `
+		Tag  string ` + "`xml:\",cdata\"`" + `
 	}`,
 		},
 
@@ -159,7 +160,7 @@ var (
 			gosrc: `
 	type TagID struct {
 		Type  string ` + "`xml:\"type,attr\"`" + `
-		TagID string ` + "`xml:\",chardata\"`" + `
+		TagID string ` + "`xml:\",cdata\"`" + `
 	}`,
 		},
 
@@ -188,7 +189,7 @@ var (
 			gosrc: `
 	type XxxURL struct {
 		Type string ` + "`xml:\"type,attr\"`" + `
-		URL  string ` + "`xml:\",chardata\"`" + `
+		URL  string ` + "`xml:\",cdata\"`" + `
 	}`,
 		},
 

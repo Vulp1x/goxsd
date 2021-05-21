@@ -16,13 +16,13 @@ import (
 var (
 	// Struct field generated from an element attribute
 	// TODO: add omitempty if minOccurences = 0
-	attr = "{{ define \"Attr\" }}{{ (lintTitle .Name) }} {{ (lint .Type) }}  `xml:\"{{ .Name }},attr\"`{{ end }}"
+	attr = "{{ define \"Attr\" }}{{ (lintTitle .Name) }} {{ (lint .Type) }}  `xml:\"{{ .Name }}{{ (omitEmpty .OmitEmpty) }},attr\"`{{ end }}"
 
 	// Struct field generated from an element child element
-	child = "{{ define \"Child\" }}{{ (lintTitle .Name) }} {{ if .List }}[]{{ end }}{{ (fieldType .) }} `xml:\"{{ .Name }}\"`{{ end }}"
+	child = "{{ define \"Child\" }}{{ (lintTitle .Name) }} {{ if .List }}[]{{ end }}{{ (typeName (fieldType .)) }} `xml:\"{{ .Name }}{{ (omitEmpty .OmitEmpty) }}\"`{{ end }}"
 
 	// Struct field generated from the character data of an element
-	cdata = `{{ define "Cdata" }}{{ printf "%s %s ` + "`xml:\\\",chardata\\\"`" + `" (lintTitle .Name) (lint .Type) }}{{ end }}`
+	cdata = `{{ define "Cdata" }}{{ printf "%s %s ` + "`xml:\\\",cdata\\\"`" + `" (lintTitle .Name) (lint .Type) }}{{ end }}`
 
 	// Struct generated from a non-trivial element (with children and/or attributes)
 	//elem = `{{ printf "// %s is generated from an XSD element.\ntype %s struct {\n" (typeName .Name) (typeName .Name) }}{{ range $a := .Attribs }}{{ template "Attr" $a }}{{ end }}{{ range $c := .Children }}{{ template "Child" $c }}{{ end }} {{ if .Cdata }}{{ template "Cdata" . }}{{ end }} }
@@ -155,18 +155,27 @@ func (g Generator) execute(root *xmlTree, tt *template.Template, out io.Writer) 
 
 func prepareTemplates(prefix string, exported bool) (*template.Template, error) {
 	typeName := func(name string) string {
-		switch name {
-		case "bool", "string", "int", "float64", "time.Time":
-		default:
-			if prefix != "" {
-				name = prefix + strings.Title(name)
-			}
-			if exported {
-				name = strings.Title(name)
-			}
-			name = lint(name)
+		if goPrimitiveType(name) {
+			return name
 		}
-		return name
+
+		if prefix != "" {
+			name = prefix + strings.Title(name)
+		}
+
+		if exported {
+			name = strings.Title(name)
+		}
+
+		return lint(name)
+	}
+
+	omitEmpty := func(empty bool) string {
+		if !empty {
+			return ""
+		}
+
+		return ",omitempty"
 	}
 
 	fmap := template.FuncMap{
@@ -174,6 +183,7 @@ func prepareTemplates(prefix string, exported bool) (*template.Template, error) 
 		"lintTitle": lintTitle,
 		"typeName":  typeName,
 		"fieldType": fieldType,
+		"omitEmpty": omitEmpty,
 	}
 
 	tt := template.New("yyy").Funcs(fmap)
@@ -194,11 +204,26 @@ func prepareTemplates(prefix string, exported bool) (*template.Template, error) 
 
 // If this is a chardata field, the field type must point to a
 // struct, even if the element type is a built-in primitive.
-func fieldType(e *xmlTree) string {
+func fieldType(e *xmlTree) (res string) {
 	if e.Cdata {
-		return e.Name
+		res = e.Name
+	} else {
+		res = e.Type
 	}
-	return e.Type
+
+	if !e.List && e.OmitEmpty {
+		res = "*" + res
+	}
+
+	return
+}
+
+func omitEmpty(e *xmlTree) string {
+	if e.OmitEmpty {
+		return ",omitempty"
+	}
+
+	return ""
 }
 
 func primitiveType(e *xmlTree) bool {
@@ -206,11 +231,19 @@ func primitiveType(e *xmlTree) bool {
 		return false
 	}
 
-	switch e.Type {
-	case "bool", "string", "int", "float64", "time.Time":
+	return goPrimitiveType(e.Type)
+}
+
+func goPrimitiveType(t string) bool {
+	t = strings.Replace(t, "*", "", 1)
+
+	switch t {
+	case "bool", "string", "int", "float64", "time.Time", "time.Duration":
 		return true
 	}
+
 	return false
+
 }
 
 // lint converts XML identifiers to Go identifiers.

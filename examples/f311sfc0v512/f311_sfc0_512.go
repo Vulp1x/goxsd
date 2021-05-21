@@ -10,7 +10,7 @@ type Файл struct {
 	ТелОтпр   string   `xml:"ТелОтпр,attr"`
 	ДолжнОтпр string   `xml:"ДолжнОтпр,attr"`
 	ФамОтпр   string   `xml:"ФамОтпр,attr"`
-	КолДок    string   `xml:"КолДок,attr"`
+	КолДок    int      `xml:"КолДок,attr"`
 	ВерсФорм  string   `xml:"ВерсФорм,attr"`
 	Документ  Документ `xml:"Документ"`
 }
@@ -29,13 +29,13 @@ type Документ struct {
 	СвБанк   СвБанк   `xml:"СвБанк"`
 	СвНП     СвНП     `xml:"СвНП"`
 	СвСчет   СвСчет   `xml:"СвСчет"`
-	Совлад   []Совлад `xml:"Совлад"`
+	Совлад   []Совлад `xml:"Совлад,omitempty"`
 }
 
 // СвБанк is generated from an XSD element.
 type СвБанк struct {
-	РегНом string `xml:"РегНом,attr"`
-	НомФ   string `xml:"НомФ,attr"`
+	РегНом int    `xml:"РегНом,attr"`
+	НомФ   int    `xml:"НомФ,attr"`
 	БИК    string `xml:"БИК,attr"`
 	НаимКО string `xml:"НаимКО,attr"`
 	ИННКО  string `xml:"ИННКО,attr"`
@@ -64,7 +64,7 @@ type НПФЛ struct {
 type ФИОФЛ struct {
 	Фамилия  string `xml:"Фамилия,attr"`
 	Имя      string `xml:"Имя,attr"`
-	Отчество string `xml:"Отчество,attr"`
+	Отчество string `xml:"Отчество,omitempty,attr"`
 }
 
 // СвСчет is generated from an XSD element.
@@ -74,7 +74,7 @@ type СвСчет struct {
 	КодСч      string `xml:"КодСч,attr"`
 	ВалСч      string `xml:"ВалСч,attr"`
 	НазнСч     string `xml:"НазнСч,attr"`
-	КолСовл    string `xml:"КолСовл,attr"`
+	КолСовл    int    `xml:"КолСовл,attr"`
 }
 
 // Совлад is generated from an XSD element.

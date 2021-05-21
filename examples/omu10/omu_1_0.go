@@ -8,7 +8,7 @@ import "time"
 type СписокОМУ struct {
 	ВерсияФормата         string           `xml:"ВерсияФормата"`
 	ДатаСписка            time.Time        `xml:"ДатаСписка"`
-	ДатаПредыдущегоСписка time.Time        `xml:"ДатаПредыдущегоСписка"`
+	ДатаПредыдущегоСписка *time.Time       `xml:"ДатаПредыдущегоСписка,omitempty"`
 	АктуальныйСписок      АктуальныйСписок `xml:"АктуальныйСписок"`
 }
 
@@ -19,13 +19,13 @@ type АктуальныйСписок struct {
 
 // Субъект is generated from an XSD element.
 type Субъект struct {
-	ИдСубъекта    int           `xml:"ИдСубъекта"`
-	УНС           string        `xml:"УНС"`
-	ТипСубъекта   ТипСубъекта   `xml:"ТипСубъекта"`
-	История       История       `xml:"История"`
-	СписокАдресов СписокАдресов `xml:"СписокАдресов"`
-	Страна        Страна        `xml:"Страна"`
-	Примечание    string        `xml:"Примечание"`
+	ИдСубъекта    int            `xml:"ИдСубъекта"`
+	УНС           *string        `xml:"УНС,omitempty"`
+	ТипСубъекта   ТипСубъекта    `xml:"ТипСубъекта"`
+	История       История        `xml:"История"`
+	СписокАдресов *СписокАдресов `xml:"СписокАдресов,omitempty"`
+	Страна        *Страна        `xml:"Страна,omitempty"`
+	Примечание    *string        `xml:"Примечание,omitempty"`
 }
 
 // ТипСубъекта is generated from an XSD element.
@@ -44,25 +44,25 @@ type СписокАдресов struct {
 
 // Адрес is generated from an XSD element.
 type Адрес struct {
-	НормАдрес            НормАдрес `xml:"НормАдрес"`
-	ТипАдреса            ТипАдреса `xml:"ТипАдреса"`
-	ТекстАдреса          string    `xml:"ТекстАдреса"`
-	ИдентификаторФИАС    string    `xml:"ИдентификаторФИАС"`
-	УровеньАдреснОбъекта int       `xml:"УровеньАдреснОбъекта"`
-	Страна               Страна    `xml:"Страна"`
-	Индекс               string    `xml:"Индекс"`
-	ОКАТО                string    `xml:"ОКАТО"`
-	Регион               string    `xml:"Регион"`
-	АвтономныйОкруг      string    `xml:"АвтономныйОкруг"`
-	Район                string    `xml:"Район"`
-	Город                string    `xml:"Город"`
-	ВнутригородскРайон   string    `xml:"ВнутригородскРайон"`
-	НаселПункт           string    `xml:"НаселПункт"`
-	Улица                string    `xml:"Улица"`
-	Дом                  string    `xml:"Дом"`
-	Корпус               string    `xml:"Корпус"`
-	Строение             string    `xml:"Строение"`
-	Помещение            string    `xml:"Помещение"`
+	НормАдрес            *НормАдрес `xml:"НормАдрес,omitempty"`
+	ТипАдреса            ТипАдреса  `xml:"ТипАдреса"`
+	ТекстАдреса          string     `xml:"ТекстАдреса"`
+	ИдентификаторФИАС    *string    `xml:"ИдентификаторФИАС,omitempty"`
+	УровеньАдреснОбъекта *int       `xml:"УровеньАдреснОбъекта,omitempty"`
+	Страна               *Страна    `xml:"Страна,omitempty"`
+	Индекс               *string    `xml:"Индекс,omitempty"`
+	ОКАТО                *string    `xml:"ОКАТО,omitempty"`
+	Регион               *string    `xml:"Регион,omitempty"`
+	АвтономныйОкруг      *string    `xml:"АвтономныйОкруг,omitempty"`
+	Район                *string    `xml:"Район,omitempty"`
+	Город                *string    `xml:"Город,omitempty"`
+	ВнутригородскРайон   *string    `xml:"ВнутригородскРайон,omitempty"`
+	НаселПункт           *string    `xml:"НаселПункт,omitempty"`
+	Улица                *string    `xml:"Улица,omitempty"`
+	Дом                  *string    `xml:"Дом,omitempty"`
+	Корпус               *string    `xml:"Корпус,omitempty"`
+	Строение             *string    `xml:"Строение,omitempty"`
+	Помещение            *string    `xml:"Помещение,omitempty"`
 }
 
 // НормАдрес is generated from an XSD element.
@@ -79,6 +79,6 @@ type ТипАдреса struct {
 
 // Страна is generated from an XSD element.
 type Страна struct {
-	Наименование string `xml:"Наименование"`
-	Код          string `xml:"Код"`
+	Наименование string  `xml:"Наименование"`
+	Код          *string `xml:"Код,omitempty"`
 }

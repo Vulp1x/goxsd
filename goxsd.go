@@ -20,13 +20,15 @@ type xmlTree struct {
 	Type       string
 	List       bool
 	Cdata      bool
+	OmitEmpty  bool
 	Attribs    []xmlAttrib
 	Children   []*xmlTree
 }
 
 type xmlAttrib struct {
-	Name string
-	Type string
+	Name      string
+	Type      string
+	OmitEmpty bool
 }
 
 type builder struct {
@@ -78,6 +80,10 @@ func (b *builder) buildFromElement(e xsdElement) *xmlTree {
 		xelem.List = true
 	}
 
+	if e.omittable() {
+		xelem.OmitEmpty = true
+	}
+
 	if !e.inlineType() {
 		switch t := b.findType(e.Type).(type) {
 		case xsdComplexType:
@@ -85,7 +91,9 @@ func (b *builder) buildFromElement(e xsdElement) *xmlTree {
 		case xsdSimpleType:
 			b.buildFromSimpleType(xelem, t)
 		case string:
-			xelem.Type = t
+			b.buildFromSimpleType(xelem, xsdSimpleType{
+				Restriction: xsdRestriction{Base: t},
+			})
 		}
 		return xelem
 	}
@@ -197,16 +205,28 @@ func (b *builder) buildFromRestriction(xelem *xmlTree, r *xsdRestriction) {
 func (b *builder) buildFromAttributes(xelem *xmlTree, attrs []xsdAttribute) {
 	for _, a := range attrs {
 		attr := xmlAttrib{Name: a.Name}
-		switch t := b.findType(a.Type).(type) {
+
+		switch typ := b.findType(a.Type).(type) {
 		case xsdSimpleType:
 			// Get type name from simpleType
 			// If Restriction.Base is a simpleType or complexType, we panic
-			attr.Type = b.findType(t.Restriction.Base).(string)
+			attr.Type = b.findType(typ.Restriction.Base).(string)
+
 		case string:
-			// If empty, then simpleType is present as content, but we ignore
-			// that now
-			attr.Type = t
+			if a.SimpleType != nil {
+				if t, ok := b.findType(a.SimpleType.Restriction.Base).(string); ok {
+					typ = t
+				}
+			}
+
+			// If empty, then simpleType is present as content, but we ignore that now.
+			attr.Type = typ
 		}
+
+		if a.Use == "optional" {
+			attr.OmitEmpty = true
+		}
+
 		xelem.Attribs = append(xelem.Attribs, attr)
 	}
 }
@@ -228,7 +248,7 @@ func (b *builder) findType(name string) interface{} {
 	switch name {
 	case "boolean":
 		return "bool"
-	case "language", "Name", "token", "duration", "anyURI":
+	case "language", "Name", "token", "duration", "anyURI", "normalizedString":
 		// FIXME: these types have additional constraints over string.
 		// For example, a token cannot have leading/trailing whitespace.
 		return "string"
@@ -242,6 +262,8 @@ func (b *builder) findType(name string) interface{} {
 		return "float64"
 	case "dateTime", "date":
 		return "time.Time"
+	case "time":
+		return "time.Duration"
 	default:
 		return name
 	}

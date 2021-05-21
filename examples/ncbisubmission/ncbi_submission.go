@@ -6,11 +6,11 @@ import "time"
 
 // Submission is generated from an XSD element.
 type Submission struct {
-	SchemaVersion string      `xml:"schema_version,attr"`
-	ResubmitOf    string      `xml:"resubmit_of,attr"`
-	Submitted     time.Time   `xml:"submitted,attr"`
-	LastUpdate    time.Time   `xml:"last_update,attr"`
-	Status        string      `xml:"status,attr"`
+	SchemaVersion string      `xml:"schema_version,omitempty,attr"`
+	ResubmitOf    string      `xml:"resubmit_of,omitempty,attr"`
+	Submitted     time.Time   `xml:"submitted,omitempty,attr"`
+	LastUpdate    time.Time   `xml:"last_update,omitempty,attr"`
+	Status        string      `xml:"status,omitempty,attr"`
 	SubmissionID  string      `xml:"submission_id,attr"`
 	Description   Description `xml:"Description"`
 	Action        []Action    `xml:"Action"`
@@ -18,60 +18,60 @@ type Submission struct {
 
 // Description is generated from an XSD element.
 type Description struct {
-	Comment            string             `xml:"Comment"`
-	Submitter          Submitter          `xml:"Submitter"`
-	Organization       []Organization     `xml:"Organization"`
-	Hold               Hold               `xml:"Hold"`
-	SubmissionSoftware SubmissionSoftware `xml:"SubmissionSoftware"`
+	Comment            *string             `xml:"Comment,omitempty"`
+	Submitter          *Submitter          `xml:"Submitter,omitempty"`
+	Organization       []Organization      `xml:"Organization"`
+	Hold               *Hold               `xml:"Hold,omitempty"`
+	SubmissionSoftware *SubmissionSoftware `xml:"SubmissionSoftware,omitempty"`
 }
 
 // Submitter is generated from an XSD element.
 type Submitter struct {
-	AccountID string  `xml:"account_id,attr"`
-	UserName  string  `xml:"user_name,attr"`
-	Authority string  `xml:"authority,attr"`
-	Contact   Contact `xml:"Contact"`
+	AccountID string   `xml:"account_id,omitempty,attr"`
+	UserName  string   `xml:"user_name,omitempty,attr"`
+	Authority string   `xml:"authority,omitempty,attr"`
+	Contact   *Contact `xml:"Contact,omitempty"`
 }
 
 // Contact is generated from an XSD element.
 type Contact struct {
-	Email    string  `xml:"email,attr"`
-	SecEmail string  `xml:"sec_email,attr"`
-	Phone    string  `xml:"phone,attr"`
-	Fax      string  `xml:"fax,attr"`
-	Address  Address `xml:"Address"`
-	Name     Name    `xml:"Name"`
+	Email    string   `xml:"email,attr"`
+	SecEmail string   `xml:"sec_email,omitempty,attr"`
+	Phone    string   `xml:"phone,attr"`
+	Fax      string   `xml:"fax,attr"`
+	Address  *Address `xml:"Address,omitempty"`
+	Name     *Name    `xml:"Name,omitempty"`
 }
 
 // Address is generated from an XSD element.
 type Address struct {
-	PostalCode  string `xml:"postal_code,attr"`
-	Department  string `xml:"Department"`
-	Institution string `xml:"Institution"`
-	Street      string `xml:"Street"`
-	City        string `xml:"City"`
-	Sub         string `xml:"Sub"`
-	Country     string `xml:"Country"`
+	PostalCode  string  `xml:"postal_code,omitempty,attr"`
+	Department  *string `xml:"Department,omitempty"`
+	Institution *string `xml:"Institution,omitempty"`
+	Street      *string `xml:"Street,omitempty"`
+	City        string  `xml:"City"`
+	Sub         *string `xml:"Sub,omitempty"`
+	Country     string  `xml:"Country"`
 }
 
 // Name is generated from an XSD element.
 type Name struct {
-	First  string `xml:"First"`
-	Last   string `xml:"Last"`
-	Middle string `xml:"Middle"`
-	Suffix string `xml:"Suffix"`
+	First  *string `xml:"First,omitempty"`
+	Last   string  `xml:"Last"`
+	Middle *string `xml:"Middle,omitempty"`
+	Suffix *string `xml:"Suffix,omitempty"`
 }
 
 // Organization is generated from an XSD element.
 type Organization struct {
 	Type    string    `xml:"type,attr"`
-	Role    string    `xml:"role,attr"`
-	OrgID   uint      `xml:"org_id,attr"`
-	URL     string    `xml:"url,attr"`
-	GroupID string    `xml:"group_id,attr"`
+	Role    string    `xml:"role,omitempty,attr"`
+	OrgID   uint      `xml:"org_id,omitempty,attr"`
+	URL     string    `xml:"url,omitempty,attr"`
+	GroupID string    `xml:"group_id,omitempty,attr"`
 	Name    Name      `xml:"Name"`
-	Address Address   `xml:"Address"`
-	Contact []Contact `xml:"Contact"`
+	Address *Address  `xml:"Address,omitempty"`
+	Contact []Contact `xml:"Contact,omitempty"`
 }
 
 // Hold is generated from an XSD element.
@@ -81,7 +81,7 @@ type Hold struct {
 
 // SubmissionSoftware is generated from an XSD element.
 type SubmissionSoftware struct {
-	Version string `xml:"version,attr"`
+	Version string `xml:"version,omitempty,attr"`
 }
 
 // Action is generated from an XSD element.
