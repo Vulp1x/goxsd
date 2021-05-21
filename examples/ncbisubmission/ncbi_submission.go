@@ -86,6 +86,97 @@ type SubmissionSoftware struct {
 
 // Action is generated from an XSD element.
 type Action struct {
-	ActionID            string `xml:"action_id,attr"`
-	SubmitterTrackingID string `xml:"submitter_tracking_id,attr"`
+	ActionID            string       `xml:"action_id,attr"`
+	SubmitterTrackingID string       `xml:"submitter_tracking_id,attr"`
+	AddFiles            AddFiles     `xml:"AddFiles"`
+	AddData             AddData      `xml:"AddData"`
+	ChangeStatus        ChangeStatus `xml:"ChangeStatus"`
+}
+
+// AddFiles is generated from an XSD element.
+type AddFiles struct {
+	File       []File      `xml:"File"`
+	Status     *Status     `xml:"Status,omitempty"`
+	IDentifier *IDentifier `xml:"Identifier,omitempty"`
+}
+
+// File is generated from an XSD element.
+type File struct {
+	FilePath      string `xml:"file_path,omitempty,attr"`
+	FileID        string `xml:"file_id,omitempty,attr"`
+	Md5           string `xml:"md5,omitempty,attr"`
+	Crc32         string `xml:"crc32,attr"`
+	ContentType   string `xml:"content_type,attr"`
+	TargetDbLabel string `xml:"target_db_label,omitempty,attr"`
+	DataType      string `xml:"DataType"`
+}
+
+// Status is generated from an XSD element.
+type Status struct {
+	Release        Release        `xml:"Release"`
+	SetReleaseDate SetReleaseDate `xml:"SetReleaseDate"`
+}
+
+// Release is generated from an XSD element.
+type Release struct{}
+
+// SetReleaseDate is generated from an XSD element.
+type SetReleaseDate struct {
+	ReleaseDate time.Time `xml:"release_date,attr"`
+}
+
+// IDentifier is generated from an XSD element.
+type IDentifier struct {
+	PrimaryID *PrimaryID `xml:"PrimaryId,omitempty"`
+	SPUID     *SPUID     `xml:"SPUID,omitempty"`
+	LocalID   *LocalID   `xml:"LocalId,omitempty"`
+}
+
+// PrimaryID is generated from an XSD element.
+type PrimaryID struct {
+	Db        string `xml:"db,omitempty,attr"`
+	ID        int    `xml:"id,omitempty,attr"`
+	PrimaryID string `xml:",cdata"`
+}
+
+// SPUID is generated from an XSD element.
+type SPUID struct {
+	SubmitterID    string `xml:"submitter_id,omitempty,attr"`
+	SpuidNamespace string `xml:"spuid_namespace,omitempty,attr"`
+	SPUID          string `xml:",cdata"`
+}
+
+// LocalID is generated from an XSD element.
+type LocalID struct {
+	SubmissionID string `xml:"submission_id,omitempty,attr"`
+	LocalID      string `xml:",cdata"`
+}
+
+// AddData is generated from an XSD element.
+type AddData struct {
+	Data       Data        `xml:"Data"`
+	Status     *Status     `xml:"Status,omitempty"`
+	IDentifier *IDentifier `xml:"Identifier,omitempty"`
+}
+
+// Data is generated from an XSD element.
+type Data struct {
+	Name            string `xml:"name,omitempty,attr"`
+	DataModel       string `xml:"data_model,omitempty,attr"`
+	ContentType     string `xml:"content_type,attr"`
+	ContentEncoding string `xml:"content_encoding,omitempty,attr"`
+	TargetDbLabel   string `xml:"target_db_label,omitempty,attr"`
+}
+
+// ChangeStatus is generated from an XSD element.
+type ChangeStatus struct {
+	Target     Target      `xml:"Target"`
+	IDentifier *IDentifier `xml:"Identifier,omitempty"`
+}
+
+// Target is generated from an XSD element.
+type Target struct {
+	LocalID   *LocalID   `xml:"LocalId,omitempty"`
+	SPUID     *SPUID     `xml:"SPUID,omitempty"`
+	PrimaryID *PrimaryID `xml:"PrimaryId,omitempty"`
 }

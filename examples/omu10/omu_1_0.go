@@ -35,7 +35,11 @@ type ТипСубъекта struct {
 }
 
 // История is generated from an XSD element.
-type История struct{}
+type История struct {
+	ДатаВключения   []time.Time `xml:"ДатаВключения"`
+	ДатаИсключения  []time.Time `xml:"ДатаИсключения,omitempty"`
+	ДатаМодификации []time.Time `xml:"ДатаМодификации,omitempty"`
+}
 
 // СписокАдресов is generated from an XSD element.
 type СписокАдресов struct {

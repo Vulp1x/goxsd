@@ -114,6 +114,12 @@ func (b *builder) buildFromElement(e xsdElement) *xmlTree {
 // buildFromComplexType takes an xmlTree and an xsdComplexType, containing
 // XSD type information for xmlTree enrichment.
 func (b *builder) buildFromComplexType(xelem *xmlTree, t xsdComplexType) {
+	if t.Choice != nil {
+		for _, e := range t.Choice {
+			xelem.Children = append(xelem.Children, b.buildFromElement(e))
+		}
+	}
+
 	if t.Sequence != nil { // Does the element have children?
 		for _, e := range t.Sequence {
 			xelem.Children = append(xelem.Children, b.buildFromElement(e))
@@ -180,6 +186,12 @@ func (b *builder) buildFromExtension(xelem *xmlTree, e *xsdExtension) {
 
 	if e.Sequence != nil {
 		for _, e := range e.Sequence {
+			xelem.Children = append(xelem.Children, b.buildFromElement(e))
+		}
+	}
+
+	if e.All != nil {
+		for _, e := range e.All {
 			xelem.Children = append(xelem.Children, b.buildFromElement(e))
 		}
 	}

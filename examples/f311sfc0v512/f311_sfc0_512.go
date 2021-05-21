@@ -75,6 +75,25 @@ type СвСчет struct {
 	ВалСч      string `xml:"ВалСч,attr"`
 	НазнСч     string `xml:"НазнСч,attr"`
 	КолСовл    int    `xml:"КолСовл,attr"`
+	Открыт     Открыт `xml:"Открыт"`
+	Закрыт     Закрыт `xml:"Закрыт"`
+}
+
+// Открыт is generated from an XSD element.
+type Открыт struct {
+	КодСостСч   string `xml:"КодСостСч,attr"`
+	НомерДог    string `xml:"НомерДог,attr"`
+	КодСостДог  string `xml:"КодСостДог,attr"`
+	ДатаЗаклДог string `xml:"ДатаЗаклДог,attr"`
+}
+
+// Закрыт is generated from an XSD element.
+type Закрыт struct {
+	КодСостСч   string `xml:"КодСостСч,attr"`
+	ДатаЗакрСч  string `xml:"ДатаЗакрСч,attr"`
+	НомерДог    string `xml:"НомерДог,omitempty,attr"`
+	КодСостДог  string `xml:"КодСостДог,attr"`
+	ДатаРастДог string `xml:"ДатаРастДог,attr"`
 }
 
 // Совлад is generated from an XSD element.
