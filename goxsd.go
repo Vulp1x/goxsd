@@ -70,25 +70,17 @@ func (b *builder) BuildXML() []*xmlTree {
 
 	var xelems []*xmlTree
 	for _, e := range roots {
-		xelems = appendXMLElement(xelems, b.buildFromElement, e)
+		xelems = b.appendElement(xelems, e)
 	}
 
 	return xelems
 }
 
-func appendXMLElement(xmlElems []*xmlTree, build func(xsdElement) (*xmlTree, bool), xsdElem xsdElement) []*xmlTree {
-	xmlElem, ok := build(xsdElem)
-	if !ok {
-		return xmlElems
-	}
-	return append(xmlElems, xmlElem)
-}
-
-// buildFromElement builds an xmlTree from an xsdElement, recursively
+// appendElement builds an xmlTree from an xsdElement, recursively
 // traversing the XSD type information to build up an XML element hierarchy.
-func (b *builder) buildFromElement(e xsdElement) (*xmlTree, bool) {
+func (b *builder) appendElement(xmlElements []*xmlTree, e xsdElement) []*xmlTree {
 	if _, ok := b.elements[e.Name+e.Type]; ok {
-		return nil, false
+		return xmlElements
 	}
 	b.elements[e.Name+e.Type] = struct{}{}
 
@@ -122,20 +114,20 @@ func (b *builder) buildFromElement(e xsdElement) (*xmlTree, bool) {
 				Restriction: xsdRestriction{Base: t},
 			})
 		}
-		return xelem, true
+		return append(xmlElements, xelem)
 	}
 
 	if e.ComplexType != nil { // inline complex type
 		b.buildFromComplexType(xelem, *e.ComplexType)
-		return xelem, true
+		return append(xmlElements, xelem)
 	}
 
 	if e.SimpleType != nil { // inline simple type
 		b.buildFromSimpleType(xelem, *e.SimpleType)
-		return xelem, true
+		return append(xmlElements, xelem)
 	}
 
-	return xelem, true
+	return append(xmlElements, xelem)
 }
 
 // buildFromComplexType takes an xmlTree and an xsdComplexType, containing
@@ -144,20 +136,20 @@ func (b *builder) buildFromComplexType(xelem *xmlTree, t xsdComplexType) {
 	if t.Choice != nil {
 		for _, e := range t.Choice {
 			e.Choice = true
-			xelem.Children = appendXMLElement(xelem.Children, b.buildFromElement, e)
+			xelem.Children = b.appendElement(xelem.Children, e)
 		}
 	}
 
 	if t.Sequence != nil { // Does the element have children?
 		for _, e := range t.Sequence {
-			xelem.Children = appendXMLElement(xelem.Children, b.buildFromElement, e)
+			xelem.Children = b.appendElement(xelem.Children, e)
 		}
 	}
 
 	if t.SeqChoice != nil {
 		for _, e := range t.SeqChoice {
 			e.Choice = true
-			xelem.Children = appendXMLElement(xelem.Children, b.buildFromElement, e)
+			xelem.Children = b.appendElement(xelem.Children, e)
 		}
 	}
 
@@ -221,13 +213,13 @@ func (b *builder) buildFromExtension(xelem *xmlTree, e *xsdExtension) {
 
 	if e.Sequence != nil {
 		for _, e := range e.Sequence {
-			xelem.Children = appendXMLElement(xelem.Children, b.buildFromElement, e)
+			xelem.Children = b.appendElement(xelem.Children, e)
 		}
 	}
 
 	if e.All != nil {
 		for _, e := range e.All {
-			xelem.Children = appendXMLElement(xelem.Children, b.buildFromElement, e)
+			xelem.Children = b.appendElement(xelem.Children, e)
 		}
 	}
 
