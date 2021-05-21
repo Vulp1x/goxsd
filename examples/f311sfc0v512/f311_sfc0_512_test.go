@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"testing"
 
+	"github.com/alexsergivan/transliterator"
 	"github.com/danil/goxsd"
 )
 
@@ -18,7 +19,9 @@ func TestGenerate(t *testing.T) {
 	}
 
 	bldr := goxsd.NewBuilder(schm)
-	gen := goxsd.Generator{Package: "f311sfc0v512"}
+	trans := transliterator.NewTransliterator(nil)
+	translate := func(s string) string { return trans.Transliterate(s, "ru") }
+	gen := goxsd.Generator{Package: "f311sfc0v512", Translator: translate}
 
 	var buf bytes.Buffer
 

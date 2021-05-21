@@ -88,9 +88,10 @@ var (
 // Generator is responsible for generating Go structs based on a given XML
 // schema tree.
 type Generator struct {
-	Package  string
-	Prefix   string
-	Exported bool
+	Package    string
+	Prefix     string
+	Exported   bool
+	Translator func(string) string
 
 	types map[string]struct{}
 }
@@ -98,7 +99,11 @@ type Generator struct {
 func (g Generator) Do(out io.Writer, roots []*xmlTree) error {
 	g.types = make(map[string]struct{})
 
-	tt, err := prepareTemplates(g.Prefix, g.Exported)
+	if g.Translator == nil {
+		g.Translator = func(s string) string { return s }
+	}
+
+	tt, err := prepareTemplates(g.Prefix, g.Exported, g.Translator)
 	if err != nil {
 		return fmt.Errorf("could not prepare templates: %s", err)
 	}
@@ -160,7 +165,7 @@ func (g Generator) execute(root *xmlTree, tt *template.Template, out io.Writer) 
 	return nil
 }
 
-func prepareTemplates(prefix string, exported bool) (*template.Template, error) {
+func prepareTemplates(prefix string, exported bool, translator func(string) string) (*template.Template, error) {
 	typeName := func(name string) string {
 		if goPrimitiveType(name) {
 			return name
@@ -174,7 +179,7 @@ func prepareTemplates(prefix string, exported bool) (*template.Template, error) 
 			name = strings.Title(name)
 		}
 
-		return lint(name)
+		return lint(name, translator)
 	}
 
 	omitEmpty := func(empty bool) string {
@@ -186,8 +191,8 @@ func prepareTemplates(prefix string, exported bool) (*template.Template, error) 
 	}
 
 	fmap := template.FuncMap{
-		"lint":      lint,
-		"lintTitle": lintTitle,
+		"lint":      func(s string) string { return lint(s, translator) },
+		"lintTitle": func(s string) string { return lintTitle(s, translator) },
 		"typeName":  typeName,
 		"fieldType": fieldType,
 		"omitEmpty": omitEmpty,
@@ -271,7 +276,7 @@ func goPrimitiveType(t string) bool {
 // Element names can contain letters, digits, hyphens, underscores, and periods
 // Element names cannot contain spaces
 // Any name can be used, no words are reserved (except xml).
-func lint(str string) string {
+func lint(str string, translator func(string) string) string {
 	if str == "" {
 		// FIXME: is this an error? Why was a default type not set earlier?
 		return "string"
@@ -306,6 +311,7 @@ func lint(str string) string {
 
 		s := strings.Title(fields[i])
 		s = initialisms.Replace(s)
+		s = translator(s)
 
 		fields[i] = s
 	}
@@ -344,6 +350,6 @@ func importedType(s string) bool {
 	return strings.Count(s, ".") == 1
 }
 
-func lintTitle(s string) string {
-	return lint(strings.Title(s))
+func lintTitle(s string, translator func(string) string) string {
+	return lint(strings.Title(s), translator)
 }
