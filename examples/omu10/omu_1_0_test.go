@@ -9,7 +9,7 @@ import (
 )
 
 //go:embed omu_1_0.go
-var sourceCode []byte
+var code []byte
 
 func TestGenerate(t *testing.T) {
 	schm, err := goxsd.ParseXSDFile("OMU_1.0.xsd")
@@ -27,7 +27,7 @@ func TestGenerate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected := string(sourceCode)
+	expected := string(code)
 
 	if buf.String() != expected {
 		t.Errorf("expected:\n%s\nreceived:\n%s", expected, buf.String())

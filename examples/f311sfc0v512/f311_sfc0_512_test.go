@@ -10,7 +10,7 @@ import (
 )
 
 //go:embed f311_sfc0_512.go
-var sourceCode []byte
+var code []byte
 
 func TestGenerate(t *testing.T) {
 	schm, err := goxsd.ParseXSDFile("SFC0_512.xsd")
@@ -30,7 +30,7 @@ func TestGenerate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected := string(sourceCode)
+	expected := string(code)
 
 	if buf.String() != expected {
 		t.Errorf("expected:\n%s\nreceived:\n%s", expected, buf.String())
