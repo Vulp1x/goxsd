@@ -7,6 +7,7 @@ import (
 
 	"github.com/alexsergivan/transliterator"
 	"github.com/danil/goxsd"
+	"github.com/google/go-cmp/cmp"
 )
 
 //go:embed f311_sfc0_512.go
@@ -31,8 +32,15 @@ func TestGenerate(t *testing.T) {
 	}
 
 	want := string(code)
+	get := buf.String()
 
-	if buf.String() != want {
-		t.Errorf("want:\n%s\nget:\n%s", want, buf.String())
+	if want != get && want != "" && get != "" {
+		t.Errorf("\ncode diff:\n%s", cmp.Diff(want, get))
+
+	} else if want != get {
+		t.Errorf(
+			"\ncode diff:\n%s\nwant:\n%s\nget:\n%s",
+			cmp.Diff(want, get), want, get,
+		)
 	}
 }
