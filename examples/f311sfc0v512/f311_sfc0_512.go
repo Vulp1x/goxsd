@@ -2,6 +2,14 @@
 
 package f311sfc0v512
 
+import "time"
+
+type (
+	DateTimeXSDType time.Time
+	DateXSDType     time.Time
+	TimeXSDType     time.Time
+)
+
 // Fajl is generated from an XSD element.
 type Fajl struct {
 	IdFajl     string   `xml:"ИдФайл,attr"`

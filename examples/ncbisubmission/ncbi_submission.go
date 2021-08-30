@@ -4,12 +4,18 @@ package ncbisubmission
 
 import "time"
 
+type (
+	DateTimeXSDType time.Time
+	DateXSDType     time.Time
+	TimeXSDType     time.Time
+)
+
 // Submission is generated from an XSD element.
 type Submission struct {
 	SchemaVersion string      `xml:"schema_version,omitempty,attr"`
 	ResubmitOf    string      `xml:"resubmit_of,omitempty,attr"`
-	Submitted     time.Time   `xml:"submitted,omitempty,attr"`
-	LastUpdate    time.Time   `xml:"last_update,omitempty,attr"`
+	Submitted     DateXSDType `xml:"submitted,omitempty,attr"`
+	LastUpdate    DateXSDType `xml:"last_update,omitempty,attr"`
 	Status        string      `xml:"status,omitempty,attr"`
 	SubmissionID  string      `xml:"submission_id,attr"`
 	Description   Description `xml:"Description"`
@@ -80,7 +86,7 @@ type Name struct {
 
 // Hold is generated from an XSD element.
 type Hold struct {
-	ReleaseDate time.Time `xml:"release_date,attr"`
+	ReleaseDate DateXSDType `xml:"release_date,attr"`
 }
 
 // SubmissionSoftware is generated from an XSD element.
@@ -130,7 +136,7 @@ type Release struct{}
 
 // SetReleaseDate is generated from an XSD element.
 type SetReleaseDate struct {
-	ReleaseDate time.Time `xml:"release_date,attr"`
+	ReleaseDate DateXSDType `xml:"release_date,attr"`
 }
 
 // TypeIDentifier is generated from an XSD element.
@@ -310,7 +316,7 @@ type Relevance struct {
 // TypePublication is generated from an XSD element.
 type TypePublication struct {
 	ID                 string              `xml:"id,attr"`
-	Date               time.Time           `xml:"date,attr"`
+	Date               DateTimeXSDType     `xml:"date,attr"`
 	Status             string              `xml:"status,attr"`
 	AuthorSet          *TypeAuthorSet      `xml:"AuthorSet,omitempty"`
 	Reference          *string             `xml:"Reference,omitempty"`

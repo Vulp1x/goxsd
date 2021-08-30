@@ -299,10 +299,12 @@ func (b *builder) findType(name string) interface{} {
 		return "uint16"
 	case "decimal":
 		return "float64"
-	case "dateTime", "date":
-		return "time.Time"
+	case "date":
+		return "DateXSDType"
+	case "dateTime":
+		return "DateTimeXSDType"
 	case "time":
-		return "time.Duration"
+		return "TimeXSDType"
 	default:
 		return name
 	}
