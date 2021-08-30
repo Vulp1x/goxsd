@@ -30,9 +30,9 @@ func TestGenerate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected := string(code)
+	want := string(code)
 
-	if buf.String() != expected {
-		t.Errorf("expected:\n%s\nreceived:\n%s", expected, buf.String())
+	if buf.String() != want {
+		t.Errorf("want:\n%s\nget:\n%s", want, buf.String())
 	}
 }
