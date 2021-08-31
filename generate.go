@@ -117,9 +117,26 @@ func (g Generator) Do(out io.Writer, roots []*xmlTree) error {
 package %s
 
 type (
-	DateTimeXSDType time.Time
-	DateXSDType     time.Time
-	TimeXSDType     time.Time
+	AnyURIXML       			string
+	BooleanXML      			bool
+	DateTimeXSDType 			time.Time
+	DateXSDType     			time.Time
+	DecimalXML      			float64
+	DurationXML     			time.Duration
+	Float64XML      			float64
+	IntXML          			int
+	IntegerXML      			int
+	LanguageXML     			string
+	LongIntXML         		int64
+	NameXML               string
+	NonNegativeIntegerXML uint
+	NormalizedStringXML   string
+	PositiveIntegerXML    uint
+	ShortIntXML           int16
+	StringXML             string
+	TimeXSDType           time.Time
+	TokenXML              string
+	UnsignedShortIntXML   uint16
 )
 `, g.Package)
 	}
@@ -260,7 +277,15 @@ func goPrimitiveType(t string) bool {
 	t = strings.Replace(t, "*", "", 1)
 
 	switch t {
-	case "bool", "string", "int", "float64", "time.Time", "time.Duration", "DateTimeXSDType", "DateXSDType", "TimeXSDType":
+	case "bool", "BooleanXML",
+		"time.Duration", "DurationXML",
+		"string", "AnyURIXML", "StringXML", "NameXML", "NormalizedStringXML", "TokenXML",
+		"int", "IntXML", "IntegerXML",
+		"int64", "LongIntXML",
+		"int16", "ShortIntXML",
+		"uint", "PositiveIntegerXML", "NonNegativeIntegerXML", "UnsignedShortIntXML",
+		"float64", "DecimalXML", "Float64XML",
+		"time.Time", "DateTimeXSDType", "DateXSDType", "TimeXSDType":
 		return true
 	}
 

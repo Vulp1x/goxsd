@@ -5,26 +5,43 @@ package ncbisubmission
 import "time"
 
 type (
-	DateTimeXSDType time.Time
-	DateXSDType     time.Time
-	TimeXSDType     time.Time
+	AnyURIXML             string
+	BooleanXML            bool
+	DateTimeXSDType       time.Time
+	DateXSDType           time.Time
+	DecimalXML            float64
+	DurationXML           time.Duration
+	Float64XML            float64
+	IntXML                int
+	IntegerXML            int
+	LanguageXML           string
+	LongIntXML            int64
+	NameXML               string
+	NonNegativeIntegerXML uint
+	NormalizedStringXML   string
+	PositiveIntegerXML    uint
+	ShortIntXML           int16
+	StringXML             string
+	TimeXSDType           time.Time
+	TokenXML              string
+	UnsignedShortIntXML   uint16
 )
 
 // Submission is generated from an XSD element.
 type Submission struct {
-	SchemaVersion string      `xml:"schema_version,omitempty,attr"`
-	ResubmitOf    string      `xml:"resubmit_of,omitempty,attr"`
+	SchemaVersion StringXML   `xml:"schema_version,omitempty,attr"`
+	ResubmitOf    StringXML   `xml:"resubmit_of,omitempty,attr"`
 	Submitted     DateXSDType `xml:"submitted,omitempty,attr"`
 	LastUpdate    DateXSDType `xml:"last_update,omitempty,attr"`
-	Status        string      `xml:"status,omitempty,attr"`
-	SubmissionID  string      `xml:"submission_id,attr"`
+	Status        StringXML   `xml:"status,omitempty,attr"`
+	SubmissionID  TokenXML    `xml:"submission_id,attr"`
 	Description   Description `xml:"Description"`
 	Action        []Action    `xml:"Action"`
 }
 
 // Description is generated from an XSD element.
 type Description struct {
-	Comment            *string             `xml:"Comment,omitempty"`
+	Comment            *StringXML          `xml:"Comment,omitempty"`
 	Submitter          *TypeAccount        `xml:"Submitter,omitempty"`
 	Organization       []TypeOrganization  `xml:"Organization"`
 	Hold               *Hold               `xml:"Hold,omitempty"`
@@ -33,55 +50,55 @@ type Description struct {
 
 // TypeAccount is generated from an XSD element.
 type TypeAccount struct {
-	AccountID string           `xml:"account_id,omitempty,attr"`
-	UserName  string           `xml:"user_name,omitempty,attr"`
-	Authority string           `xml:"authority,omitempty,attr"`
+	AccountID StringXML        `xml:"account_id,omitempty,attr"`
+	UserName  StringXML        `xml:"user_name,omitempty,attr"`
+	Authority StringXML        `xml:"authority,omitempty,attr"`
 	Contact   *TypeContactInfo `xml:"Contact,omitempty"`
 }
 
 // TypeContactInfo is generated from an XSD element.
 type TypeContactInfo struct {
-	Email    string       `xml:"email,attr"`
-	SecEmail string       `xml:"sec_email,omitempty,attr"`
-	Phone    string       `xml:"phone,attr"`
-	Fax      string       `xml:"fax,attr"`
+	Email    StringXML    `xml:"email,attr"`
+	SecEmail StringXML    `xml:"sec_email,omitempty,attr"`
+	Phone    StringXML    `xml:"phone,attr"`
+	Fax      StringXML    `xml:"fax,attr"`
 	Address  *TypeAddress `xml:"Address,omitempty"`
 	Name     *TypeName    `xml:"Name,omitempty"`
 }
 
 // TypeAddress is generated from an XSD element.
 type TypeAddress struct {
-	PostalCode  string  `xml:"postal_code,omitempty,attr"`
-	Department  *string `xml:"Department,omitempty"`
-	Institution *string `xml:"Institution,omitempty"`
-	Street      *string `xml:"Street,omitempty"`
-	City        string  `xml:"City"`
-	Sub         *string `xml:"Sub,omitempty"`
-	Country     string  `xml:"Country"`
+	PostalCode  StringXML  `xml:"postal_code,omitempty,attr"`
+	Department  *StringXML `xml:"Department,omitempty"`
+	Institution *StringXML `xml:"Institution,omitempty"`
+	Street      *StringXML `xml:"Street,omitempty"`
+	City        StringXML  `xml:"City"`
+	Sub         *StringXML `xml:"Sub,omitempty"`
+	Country     StringXML  `xml:"Country"`
 }
 
 // TypeName is generated from an XSD element.
 type TypeName struct {
-	First  *string `xml:"First,omitempty"`
-	Last   string  `xml:"Last"`
-	Middle *string `xml:"Middle,omitempty"`
-	Suffix *string `xml:"Suffix,omitempty"`
+	First  *StringXML `xml:"First,omitempty"`
+	Last   StringXML  `xml:"Last"`
+	Middle *StringXML `xml:"Middle,omitempty"`
+	Suffix *StringXML `xml:"Suffix,omitempty"`
 }
 
 // TypeOrganization is generated from an XSD element.
 type TypeOrganization struct {
-	Type    string `xml:"type,attr"`
-	Role    string `xml:"role,omitempty,attr"`
-	OrgID   uint   `xml:"org_id,omitempty,attr"`
-	URL     string `xml:"url,omitempty,attr"`
-	GroupID string `xml:"group_id,omitempty,attr"`
-	Name    Name   `xml:"Name"`
+	Type    StringXML          `xml:"type,attr"`
+	Role    StringXML          `xml:"role,omitempty,attr"`
+	OrgID   PositiveIntegerXML `xml:"org_id,omitempty,attr"`
+	URL     StringXML          `xml:"url,omitempty,attr"`
+	GroupID StringXML          `xml:"group_id,omitempty,attr"`
+	Name    Name               `xml:"Name"`
 }
 
 // Name is generated from an XSD element.
 type Name struct {
-	Abbr string `xml:"abbr,omitempty,attr"`
-	Name string `xml:",cdata"`
+	Abbr StringXML `xml:"abbr,omitempty,attr"`
+	Name StringXML `xml:",cdata"`
 }
 
 // Hold is generated from an XSD element.
@@ -96,8 +113,8 @@ type SubmissionSoftware struct {
 
 // Action is generated from an XSD element.
 type Action struct {
-	ActionID            string        `xml:"action_id,attr"`
-	SubmitterTrackingID string        `xml:"submitter_tracking_id,attr"`
+	ActionID            TokenXML      `xml:"action_id,attr"`
+	SubmitterTrackingID StringXML     `xml:"submitter_tracking_id,attr"`
 	AddFiles            *AddFiles     `xml:"AddFiles,omitempty"`
 	AddData             *AddData      `xml:"AddData,omitempty"`
 	ChangeStatus        *ChangeStatus `xml:"ChangeStatus,omitempty"`
@@ -116,13 +133,13 @@ type AddFiles struct {
 
 // File is generated from an XSD element.
 type File struct {
-	FilePath      string `xml:"file_path,omitempty,attr"`
-	FileID        string `xml:"file_id,omitempty,attr"`
-	Md5           string `xml:"md5,omitempty,attr"`
-	Crc32         string `xml:"crc32,attr"`
-	ContentType   string `xml:"content_type,attr"`
-	TargetDbLabel string `xml:"target_db_label,omitempty,attr"`
-	DataType      string `xml:"DataType"`
+	FilePath      StringXML `xml:"file_path,omitempty,attr"`
+	FileID        StringXML `xml:"file_id,omitempty,attr"`
+	Md5           StringXML `xml:"md5,omitempty,attr"`
+	Crc32         StringXML `xml:"crc32,attr"`
+	ContentType   StringXML `xml:"content_type,attr"`
+	TargetDbLabel string    `xml:"target_db_label,omitempty,attr"`
+	DataType      StringXML `xml:"DataType"`
 }
 
 // TypeReleaseStatus is generated from an XSD element.
@@ -148,38 +165,38 @@ type TypeIDentifier struct {
 
 // PrimaryID is generated from an XSD element.
 type PrimaryID struct {
-	Db        string `xml:"db,omitempty,attr"`
-	ID        int    `xml:"id,omitempty,attr"`
-	PrimaryID string `xml:",cdata"`
+	Db        StringXML  `xml:"db,omitempty,attr"`
+	ID        IntegerXML `xml:"id,omitempty,attr"`
+	PrimaryID StringXML  `xml:",cdata"`
 }
 
 // SPUID is generated from an XSD element.
 type SPUID struct {
-	SubmitterID    string `xml:"submitter_id,omitempty,attr"`
-	SpuidNamespace string `xml:"spuid_namespace,omitempty,attr"`
-	SPUID          string `xml:",cdata"`
+	SubmitterID    StringXML `xml:"submitter_id,omitempty,attr"`
+	SpuidNamespace StringXML `xml:"spuid_namespace,omitempty,attr"`
+	SPUID          StringXML `xml:",cdata"`
 }
 
 // LocalID is generated from an XSD element.
 type LocalID struct {
-	SubmissionID string `xml:"submission_id,omitempty,attr"`
-	LocalID      string `xml:",cdata"`
+	SubmissionID StringXML `xml:"submission_id,omitempty,attr"`
+	LocalID      StringXML `xml:",cdata"`
 }
 
 // Attribute is generated from an XSD element.
 type Attribute struct {
-	Name      string `xml:"name,attr"`
-	Attribute string `xml:",cdata"`
+	Name      StringXML `xml:"name,attr"`
+	Attribute StringXML `xml:",cdata"`
 }
 
 // TypeInlineData is generated from an XSD element.
 type TypeInlineData struct {
-	Name            string         `xml:"name,omitempty,attr"`
-	DataModel       string         `xml:"data_model,omitempty,attr"`
-	ContentType     string         `xml:"content_type,attr"`
-	ContentEncoding string         `xml:"content_encoding,omitempty,attr"`
+	Name            StringXML      `xml:"name,omitempty,attr"`
+	DataModel       StringXML      `xml:"data_model,omitempty,attr"`
+	ContentType     StringXML      `xml:"content_type,attr"`
+	ContentEncoding StringXML      `xml:"content_encoding,omitempty,attr"`
 	XMLContent      *XMLContent    `xml:"XmlContent,omitempty"`
-	DataContent     *string        `xml:"DataContent,omitempty"`
+	DataContent     *StringXML     `xml:"DataContent,omitempty"`
 	Project         *TypeProject   `xml:"Project,omitempty"`
 	BioSample       *TypeBioSample `xml:"BioSample,omitempty"`
 	Genome          *TypeGenome    `xml:"Genome,omitempty"`
@@ -190,7 +207,7 @@ type XMLContent struct{}
 
 // TypeProject is generated from an XSD element.
 type TypeProject struct {
-	SchemaVersion string         `xml:"schema_version,attr"`
+	SchemaVersion StringXML      `xml:"schema_version,attr"`
 	ProjectID     TypeIDentifier `xml:"ProjectID"`
 	Descriptor    Descriptor     `xml:"Descriptor"`
 	ProjectType   ProjectType    `xml:"ProjectType"`
@@ -198,14 +215,14 @@ type TypeProject struct {
 
 // Descriptor is generated from an XSD element.
 type Descriptor struct {
-	Title        *string            `xml:"Title,omitempty"`
+	Title        *StringXML         `xml:"Title,omitempty"`
 	Description  *TypeBlock         `xml:"Description,omitempty"`
 	ExternalLink []TypeExternalLink `xml:"ExternalLink,omitempty"`
-	Name         *string            `xml:"Name,omitempty"`
+	Name         *StringXML         `xml:"Name,omitempty"`
 	Grant        []Grant            `xml:"Grant,omitempty"`
 	Relevance    *Relevance         `xml:"Relevance,omitempty"`
 	Publication  []TypePublication  `xml:"Publication,omitempty"`
-	Keyword      []string           `xml:"Keyword,omitempty"`
+	Keyword      []StringXML        `xml:"Keyword,omitempty"`
 	UserTerm     []UserTerm         `xml:"UserTerm,omitempty"`
 }
 
@@ -224,8 +241,8 @@ type TypeInline struct {
 
 // TypeA is generated from an XSD element.
 type TypeA struct {
-	Href string      `xml:"href,attr"`
-	Type string      `xml:"type,attr"`
+	Href AnyURIXML   `xml:"href,attr"`
+	Type StringXML   `xml:"type,attr"`
 	I    *TypeInline `xml:"i,omitempty"`
 }
 
@@ -254,74 +271,74 @@ type TypeTR struct {
 
 // TypeTH is generated from an XSD element.
 type TypeTH struct {
-	Rowspan uint `xml:"rowspan,attr"`
-	Colspan uint `xml:"colspan,attr"`
+	Rowspan NonNegativeIntegerXML `xml:"rowspan,attr"`
+	Colspan NonNegativeIntegerXML `xml:"colspan,attr"`
 }
 
 // TypeTD is generated from an XSD element.
 type TypeTD struct {
-	Rowspan uint `xml:"rowspan,attr"`
-	Colspan uint `xml:"colspan,attr"`
+	Rowspan NonNegativeIntegerXML `xml:"rowspan,attr"`
+	Colspan NonNegativeIntegerXML `xml:"colspan,attr"`
 }
 
 // TypeExternalLink is generated from an XSD element.
 type TypeExternalLink struct {
-	Label       string      `xml:"label,attr"`
-	Category    string      `xml:"category,omitempty,attr"`
-	URL         *string     `xml:"URL,omitempty"`
+	Label       StringXML   `xml:"label,attr"`
+	Category    StringXML   `xml:"category,omitempty,attr"`
+	URL         *AnyURIXML  `xml:"URL,omitempty"`
 	ExternalID  *ExternalID `xml:"ExternalID,omitempty"`
-	EntrezQuery *string     `xml:"EntrezQuery,omitempty"`
+	EntrezQuery *StringXML  `xml:"EntrezQuery,omitempty"`
 }
 
 // ExternalID is generated from an XSD element.
 type ExternalID struct {
-	Db         string `xml:"db,omitempty,attr"`
-	ID         int    `xml:"id,omitempty,attr"`
-	ExternalID string `xml:",cdata"`
+	Db         StringXML  `xml:"db,omitempty,attr"`
+	ID         IntegerXML `xml:"id,omitempty,attr"`
+	ExternalID StringXML  `xml:",cdata"`
 }
 
 // Grant is generated from an XSD element.
 type Grant struct {
-	GrantID string `xml:"GrantId,attr"`
-	Agency  Agency `xml:"Agency"`
-	PI      []PI   `xml:"PI,omitempty"`
+	GrantID StringXML `xml:"GrantId,attr"`
+	Agency  Agency    `xml:"Agency"`
+	PI      []PI      `xml:"PI,omitempty"`
 }
 
 // Agency is generated from an XSD element.
 type Agency struct {
-	Abbr   string `xml:"abbr,attr"`
-	Agency string `xml:",cdata"`
+	Abbr   StringXML `xml:"abbr,attr"`
+	Agency StringXML `xml:",cdata"`
 }
 
 // PI is generated from an XSD element.
 type PI struct {
-	Auth        string  `xml:"auth,omitempty,attr"`
-	Userid      string  `xml:"userid,omitempty,attr"`
-	GrantUserID string  `xml:"grant_user_id,omitempty,attr"`
-	Affil       string  `xml:"affil,omitempty,attr"`
-	Given       *string `xml:"Given,omitempty"`
+	Auth        StringXML  `xml:"auth,omitempty,attr"`
+	Userid      StringXML  `xml:"userid,omitempty,attr"`
+	GrantUserID StringXML  `xml:"grant_user_id,omitempty,attr"`
+	Affil       StringXML  `xml:"affil,omitempty,attr"`
+	Given       *StringXML `xml:"Given,omitempty"`
 }
 
 // Relevance is generated from an XSD element.
 type Relevance struct {
-	Agricultural  *string `xml:"Agricultural,omitempty"`
-	Medical       *string `xml:"Medical,omitempty"`
-	Industrial    *string `xml:"Industrial,omitempty"`
-	Environmental *string `xml:"Environmental,omitempty"`
-	Evolution     *string `xml:"Evolution,omitempty"`
-	ModelOrganism *string `xml:"ModelOrganism,omitempty"`
-	Other         *string `xml:"Other,omitempty"`
+	Agricultural  *StringXML `xml:"Agricultural,omitempty"`
+	Medical       *StringXML `xml:"Medical,omitempty"`
+	Industrial    *StringXML `xml:"Industrial,omitempty"`
+	Environmental *StringXML `xml:"Environmental,omitempty"`
+	Evolution     *StringXML `xml:"Evolution,omitempty"`
+	ModelOrganism *StringXML `xml:"ModelOrganism,omitempty"`
+	Other         *StringXML `xml:"Other,omitempty"`
 }
 
 // TypePublication is generated from an XSD element.
 type TypePublication struct {
-	ID                 string              `xml:"id,attr"`
+	ID                 StringXML           `xml:"id,attr"`
 	Date               DateTimeXSDType     `xml:"date,attr"`
-	Status             string              `xml:"status,attr"`
+	Status             TokenXML            `xml:"status,attr"`
 	AuthorSet          *TypeAuthorSet      `xml:"AuthorSet,omitempty"`
-	Reference          *string             `xml:"Reference,omitempty"`
+	Reference          *StringXML          `xml:"Reference,omitempty"`
 	StructuredCitation *StructuredCitation `xml:"StructuredCitation,omitempty"`
-	DbType             string              `xml:"DbType"`
+	DbType             TokenXML            `xml:"DbType"`
 }
 
 // TypeAuthorSet is generated from an XSD element.
@@ -331,7 +348,7 @@ type TypeAuthorSet struct {
 
 // Author is generated from an XSD element.
 type Author struct {
-	Consortium *string `xml:"Consortium,omitempty"`
+	Consortium *StringXML `xml:"Consortium,omitempty"`
 }
 
 // StructuredCitation is generated from an XSD element.
@@ -341,20 +358,20 @@ type StructuredCitation struct {
 
 // Journal is generated from an XSD element.
 type Journal struct {
-	JournalTitle string  `xml:"JournalTitle"`
-	Year         *string `xml:"Year,omitempty"`
-	Volume       *string `xml:"Volume,omitempty"`
-	Issue        *string `xml:"Issue,omitempty"`
-	PagesFrom    *string `xml:"PagesFrom,omitempty"`
-	PagesTo      *string `xml:"PagesTo,omitempty"`
+	JournalTitle StringXML  `xml:"JournalTitle"`
+	Year         *StringXML `xml:"Year,omitempty"`
+	Volume       *StringXML `xml:"Volume,omitempty"`
+	Issue        *StringXML `xml:"Issue,omitempty"`
+	PagesFrom    *StringXML `xml:"PagesFrom,omitempty"`
+	PagesTo      *StringXML `xml:"PagesTo,omitempty"`
 }
 
 // UserTerm is generated from an XSD element.
 type UserTerm struct {
-	Term     string `xml:"term,attr"`
-	Category string `xml:"category,omitempty,attr"`
-	Units    string `xml:"units,omitempty,attr"`
-	UserTerm string `xml:",cdata"`
+	Term     StringXML `xml:"term,attr"`
+	Category StringXML `xml:"category,omitempty,attr"`
+	Units    StringXML `xml:"units,omitempty,attr"`
+	UserTerm StringXML `xml:",cdata"`
 }
 
 // ProjectType is generated from an XSD element.
@@ -365,25 +382,25 @@ type ProjectType struct {
 
 // ProjectTypeTopAdmin is generated from an XSD element.
 type ProjectTypeTopAdmin struct {
-	Subtype                 string        `xml:"subtype,attr"`
+	Subtype                 TokenXML      `xml:"subtype,attr"`
 	Organism                *TypeOrganism `xml:"Organism,omitempty"`
-	DescriptionSubtypeOther *string       `xml:"DescriptionSubtypeOther,omitempty"`
+	DescriptionSubtypeOther *StringXML    `xml:"DescriptionSubtypeOther,omitempty"`
 }
 
 // TypeOrganism is generated from an XSD element.
 type TypeOrganism struct {
-	TaxonomyID   int     `xml:"taxonomy_id,omitempty,attr"`
-	OrganismName string  `xml:"OrganismName"`
-	Label        *string `xml:"Label,omitempty"`
-	Strain       *string `xml:"Strain,omitempty"`
-	IsolateName  *string `xml:"IsolateName,omitempty"`
-	Breed        *string `xml:"Breed,omitempty"`
-	Cultivar     *string `xml:"Cultivar,omitempty"`
+	TaxonomyID   IntXML     `xml:"taxonomy_id,omitempty,attr"`
+	OrganismName StringXML  `xml:"OrganismName"`
+	Label        *StringXML `xml:"Label,omitempty"`
+	Strain       *StringXML `xml:"Strain,omitempty"`
+	IsolateName  *StringXML `xml:"IsolateName,omitempty"`
+	Breed        *StringXML `xml:"Breed,omitempty"`
+	Cultivar     *StringXML `xml:"Cultivar,omitempty"`
 }
 
 // ProjectTypeSubmission is generated from an XSD element.
 type ProjectTypeSubmission struct {
-	SampleScope         string              `xml:"sample_scope,attr"`
+	SampleScope         TokenXML            `xml:"sample_scope,attr"`
 	BioSampleSet        *BioSampleSet       `xml:"BioSampleSet,omitempty"`
 	IntendedDataTypeSet IntendedDataTypeSet `xml:"IntendedDataTypeSet"`
 }
@@ -395,7 +412,7 @@ type BioSampleSet struct {
 
 // BioSample is generated from an XSD element.
 type BioSample struct {
-	LocusTagPrefix string `xml:"LocusTagPrefix,omitempty,attr"`
+	LocusTagPrefix TokenXML `xml:"LocusTagPrefix,omitempty,attr"`
 }
 
 // IntendedDataTypeSet is generated from an XSD element.
@@ -403,11 +420,11 @@ type IntendedDataTypeSet struct{}
 
 // TypeBioSample is generated from an XSD element.
 type TypeBioSample struct {
-	SchemaVersion string                  `xml:"schema_version,attr"`
+	SchemaVersion StringXML               `xml:"schema_version,attr"`
 	SampleID      TypeBioSampleIDentifier `xml:"SampleId"`
 	Descriptor    TypeDescriptor          `xml:"Descriptor"`
 	BioProject    []TypeRefID             `xml:"BioProject,omitempty"`
-	Package       string                  `xml:"Package"`
+	Package       StringXML               `xml:"Package"`
 	Attributes    Attributes              `xml:"Attributes"`
 }
 
@@ -440,27 +457,27 @@ type Chromosomes struct {
 
 // Chromosome is generated from an XSD element.
 type Chromosome struct {
-	Type                          string                 `xml:"type,attr"`
-	ChromosomeName                string                 `xml:"chromosome_name,attr"`
+	Type                          StringXML              `xml:"type,attr"`
+	ChromosomeName                StringXML              `xml:"chromosome_name,attr"`
 	TheChromosomeSequence         *TheChromosomeSequence `xml:"TheChromosomeSequence,omitempty"`
-	UnlocalizedChromosomeSequence []string               `xml:"UnlocalizedChromosomeSequence,omitempty"`
+	UnlocalizedChromosomeSequence []StringXML            `xml:"UnlocalizedChromosomeSequence,omitempty"`
 }
 
 // TheChromosomeSequence is generated from an XSD element.
 type TheChromosomeSequence struct {
-	Circular              string `xml:"circular,attr"`
-	EndsAbut              string `xml:"ends_abut,omitempty,attr"`
-	TheChromosomeSequence string `xml:",cdata"`
+	Circular              TokenXML  `xml:"circular,attr"`
+	EndsAbut              TokenXML  `xml:"ends_abut,omitempty,attr"`
+	TheChromosomeSequence StringXML `xml:",cdata"`
 }
 
 // Unplaced is generated from an XSD element.
 type Unplaced struct {
-	UnplacedSequence []string `xml:"UnplacedSequence"`
+	UnplacedSequence []StringXML `xml:"UnplacedSequence"`
 }
 
 // TypeFileAttributeRefID is generated from an XSD element.
 type TypeFileAttributeRefID struct {
-	Name  string    `xml:"name,attr"`
+	Name  StringXML `xml:"name,attr"`
 	RefID TypeRefID `xml:"RefId"`
 }
 
@@ -471,9 +488,9 @@ type TypeSequenceData struct {
 
 // Sequence is generated from an XSD element.
 type Sequence struct {
-	ID      string `xml:"id,attr"`
-	Type    string `xml:"type,attr"`
-	OnlyOne string `xml:"only_one,omitempty,attr"`
+	ID      StringXML `xml:"id,attr"`
+	Type    StringXML `xml:"type,attr"`
+	OnlyOne StringXML `xml:"only_one,omitempty,attr"`
 }
 
 // AddData is generated from an XSD element.
@@ -483,17 +500,17 @@ type AddData struct {
 
 // Data is generated from an XSD element.
 type Data struct {
-	Name            string `xml:"name,omitempty,attr"`
-	DataModel       string `xml:"data_model,omitempty,attr"`
-	ContentType     string `xml:"content_type,attr"`
-	ContentEncoding string `xml:"content_encoding,omitempty,attr"`
-	TargetDbLabel   string `xml:"target_db_label,omitempty,attr"`
+	Name            StringXML `xml:"name,omitempty,attr"`
+	DataModel       StringXML `xml:"data_model,omitempty,attr"`
+	ContentType     StringXML `xml:"content_type,attr"`
+	ContentEncoding StringXML `xml:"content_encoding,omitempty,attr"`
+	TargetDbLabel   string    `xml:"target_db_label,omitempty,attr"`
 }
 
 // ChangeStatus is generated from an XSD element.
 type ChangeStatus struct {
-	Target     TypeRefID `xml:"Target"`
-	Suppress   *string   `xml:"Suppress,omitempty"`
-	Withdraw   *string   `xml:"Withdraw,omitempty"`
-	AddComment *string   `xml:"AddComment,omitempty"`
+	Target     TypeRefID  `xml:"Target"`
+	Suppress   *StringXML `xml:"Suppress,omitempty"`
+	Withdraw   *StringXML `xml:"Withdraw,omitempty"`
+	AddComment *StringXML `xml:"AddComment,omitempty"`
 }

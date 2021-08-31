@@ -11,9 +11,7 @@ import (
 	"golang.org/x/text/encoding/charmap"
 )
 
-var (
-	parsedFiles = make(map[string]struct{})
-)
+var parsedFiles = make(map[string]struct{})
 
 func ParseXSDFile(fname string) ([]xsdSchema, error) {
 	f, err := os.Open(fname)

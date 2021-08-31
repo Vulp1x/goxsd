@@ -5,106 +5,123 @@ package f311sfc0v512
 import "time"
 
 type (
-	DateTimeXSDType time.Time
-	DateXSDType     time.Time
-	TimeXSDType     time.Time
+	AnyURIXML             string
+	BooleanXML            bool
+	DateTimeXSDType       time.Time
+	DateXSDType           time.Time
+	DecimalXML            float64
+	DurationXML           time.Duration
+	Float64XML            float64
+	IntXML                int
+	IntegerXML            int
+	LanguageXML           string
+	LongIntXML            int64
+	NameXML               string
+	NonNegativeIntegerXML uint
+	NormalizedStringXML   string
+	PositiveIntegerXML    uint
+	ShortIntXML           int16
+	StringXML             string
+	TimeXSDType           time.Time
+	TokenXML              string
+	UnsignedShortIntXML   uint16
 )
 
 // Fajl is generated from an XSD element.
 type Fajl struct {
-	IdFajl     string   `xml:"ИдФайл,attr"`
-	TipInf     string   `xml:"ТипИнф,attr"`
-	VersProg   string   `xml:"ВерсПрог,attr"`
-	TelOtpr    string   `xml:"ТелОтпр,attr"`
-	DolzhnOtpr string   `xml:"ДолжнОтпр,attr"`
-	FamOtpr    string   `xml:"ФамОтпр,attr"`
-	KolDok     int      `xml:"КолДок,attr"`
-	VersForm   string   `xml:"ВерсФорм,attr"`
-	Dokument   Dokument `xml:"Документ"`
+	IdFajl     StringXML  `xml:"ИдФайл,attr"`
+	TipInf     StringXML  `xml:"ТипИнф,attr"`
+	VersProg   StringXML  `xml:"ВерсПрог,attr"`
+	TelOtpr    StringXML  `xml:"ТелОтпр,attr"`
+	DolzhnOtpr StringXML  `xml:"ДолжнОтпр,attr"`
+	FamOtpr    StringXML  `xml:"ФамОтпр,attr"`
+	KolDok     IntegerXML `xml:"КолДок,attr"`
+	VersForm   StringXML  `xml:"ВерсФорм,attr"`
+	Dokument   Dokument   `xml:"Документ"`
 }
 
 // Dokument is generated from an XSD element.
 type Dokument struct {
-	IdDok     string   `xml:"ИдДок,attr"`
-	KND       string   `xml:"КНД,attr"`
-	KodNOB    string   `xml:"КодНОБ,attr"`
-	NomSoob   string   `xml:"НомСооб,attr"`
-	TipSoob   string   `xml:"ТипСооб,attr"`
-	DolzhnPrB string   `xml:"ДолжнПрБ,attr"`
-	FamPrB    string   `xml:"ФамПрБ,attr"`
-	TelBanka  string   `xml:"ТелБанка,attr"`
-	DataSoob  string   `xml:"ДатаСооб,attr"`
-	SvBank    SvBank   `xml:"СвБанк"`
-	SvNP      SvNP     `xml:"СвНП"`
-	SvSchet   SvSchet  `xml:"СвСчет"`
-	Sovlad    []Sovlad `xml:"Совлад,omitempty"`
+	IdDok     StringXML `xml:"ИдДок,attr"`
+	KND       string    `xml:"КНД,attr"`
+	KodNOB    StringXML `xml:"КодНОБ,attr"`
+	NomSoob   StringXML `xml:"НомСооб,attr"`
+	TipSoob   StringXML `xml:"ТипСооб,attr"`
+	DolzhnPrB StringXML `xml:"ДолжнПрБ,attr"`
+	FamPrB    StringXML `xml:"ФамПрБ,attr"`
+	TelBanka  StringXML `xml:"ТелБанка,attr"`
+	DataSoob  StringXML `xml:"ДатаСооб,attr"`
+	SvBank    SvBank    `xml:"СвБанк"`
+	SvNP      SvNP      `xml:"СвНП"`
+	SvSchet   SvSchet   `xml:"СвСчет"`
+	Sovlad    []Sovlad  `xml:"Совлад,omitempty"`
 }
 
 // SvBank is generated from an XSD element.
 type SvBank struct {
-	RegNom int    `xml:"РегНом,attr"`
-	NomF   int    `xml:"НомФ,attr"`
-	BIK    string `xml:"БИК,attr"`
-	NaimKO string `xml:"НаимКО,attr"`
-	INNKO  string `xml:"ИННКО,attr"`
-	KPPKO  string `xml:"КППКО,attr"`
-	OGRNKO string `xml:"ОГРНКО,attr"`
+	RegNom IntegerXML `xml:"РегНом,attr"`
+	NomF   IntegerXML `xml:"НомФ,attr"`
+	BIK    string     `xml:"БИК,attr"`
+	NaimKO StringXML  `xml:"НаимКО,attr"`
+	INNKO  StringXML  `xml:"ИННКО,attr"`
+	KPPKO  StringXML  `xml:"КППКО,attr"`
+	OGRNKO StringXML  `xml:"ОГРНКО,attr"`
 }
 
 // SvNP is generated from an XSD element.
 type SvNP struct {
-	KodLitsa string  `xml:"КодЛица,attr"`
-	NPFL     NPFLTip `xml:"НПФЛ"`
+	KodLitsa StringXML `xml:"КодЛица,attr"`
+	NPFL     NPFLTip   `xml:"НПФЛ"`
 }
 
 // NPFLTip is generated from an XSD element.
 type NPFLTip struct {
-	INNFL      string `xml:"ИННФЛ,attr"`
-	DataRozhd  string `xml:"ДатаРожд,attr"`
-	MestoRozhd string `xml:"МестоРожд,attr"`
-	KodDUL     string `xml:"КодДУЛ,attr"`
-	SerNomDok  string `xml:"СерНомДок,attr"`
-	DataDok    string `xml:"ДатаДок,attr"`
-	FIOFL      FIOTip `xml:"ФИОФЛ"`
+	INNFL      StringXML `xml:"ИННФЛ,attr"`
+	DataRozhd  StringXML `xml:"ДатаРожд,attr"`
+	MestoRozhd StringXML `xml:"МестоРожд,attr"`
+	KodDUL     StringXML `xml:"КодДУЛ,attr"`
+	SerNomDok  StringXML `xml:"СерНомДок,attr"`
+	DataDok    StringXML `xml:"ДатаДок,attr"`
+	FIOFL      FIOTip    `xml:"ФИОФЛ"`
 }
 
 // FIOTip is generated from an XSD element.
 type FIOTip struct {
-	Familija  string `xml:"Фамилия,attr"`
-	Imja      string `xml:"Имя,attr"`
-	Otchestvo string `xml:"Отчество,omitempty,attr"`
+	Familija  StringXML `xml:"Фамилия,attr"`
+	Imja      StringXML `xml:"Имя,attr"`
+	Otchestvo StringXML `xml:"Отчество,omitempty,attr"`
 }
 
 // SvSchet is generated from an XSD element.
 type SvSchet struct {
-	NomSch      string  `xml:"НомСч,attr"`
-	DataOtkrSch string  `xml:"ДатаОткрСч,attr"`
-	KodSch      string  `xml:"КодСч,attr"`
-	ValSch      string  `xml:"ВалСч,attr"`
-	NaznSch     string  `xml:"НазнСч,attr"`
-	KolSovl     int     `xml:"КолСовл,attr"`
-	Otkryt      *Otkryt `xml:"Открыт,omitempty"`
-	Zakryt      *Zakryt `xml:"Закрыт,omitempty"`
+	NomSch      StringXML  `xml:"НомСч,attr"`
+	DataOtkrSch StringXML  `xml:"ДатаОткрСч,attr"`
+	KodSch      StringXML  `xml:"КодСч,attr"`
+	ValSch      StringXML  `xml:"ВалСч,attr"`
+	NaznSch     StringXML  `xml:"НазнСч,attr"`
+	KolSovl     IntegerXML `xml:"КолСовл,attr"`
+	Otkryt      *Otkryt    `xml:"Открыт,omitempty"`
+	Zakryt      *Zakryt    `xml:"Закрыт,omitempty"`
 }
 
 // Otkryt is generated from an XSD element.
 type Otkryt struct {
-	KodSostSch  string `xml:"КодСостСч,attr"`
-	NomerDog    string `xml:"НомерДог,attr"`
-	KodSostDog  string `xml:"КодСостДог,attr"`
-	DataZaklDog string `xml:"ДатаЗаклДог,attr"`
+	KodSostSch  StringXML `xml:"КодСостСч,attr"`
+	NomerDog    StringXML `xml:"НомерДог,attr"`
+	KodSostDog  StringXML `xml:"КодСостДог,attr"`
+	DataZaklDog StringXML `xml:"ДатаЗаклДог,attr"`
 }
 
 // Zakryt is generated from an XSD element.
 type Zakryt struct {
-	KodSostSch  string `xml:"КодСостСч,attr"`
-	DataZakrSch string `xml:"ДатаЗакрСч,attr"`
-	NomerDog    string `xml:"НомерДог,omitempty,attr"`
-	KodSostDog  string `xml:"КодСостДог,attr"`
-	DataRastDog string `xml:"ДатаРастДог,attr"`
+	KodSostSch  StringXML `xml:"КодСостСч,attr"`
+	DataZakrSch StringXML `xml:"ДатаЗакрСч,attr"`
+	NomerDog    StringXML `xml:"НомерДог,omitempty,attr"`
+	KodSostDog  StringXML `xml:"КодСостДог,attr"`
+	DataRastDog StringXML `xml:"ДатаРастДог,attr"`
 }
 
 // Sovlad is generated from an XSD element.
 type Sovlad struct {
-	KodLitsa string `xml:"КодЛица,attr"`
+	KodLitsa StringXML `xml:"КодЛица,attr"`
 }

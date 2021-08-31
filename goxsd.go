@@ -286,25 +286,62 @@ func (b *builder) findType(name string) interface{} {
 
 	switch name {
 	case "boolean":
-		return "bool"
-	case "language", "Name", "token", "duration", "anyURI", "normalizedString":
-		// FIXME: these types have additional constraints over string.
-		// For example, a token cannot have leading/trailing whitespace.
-		return "string"
-	case "long", "short", "integer", "int":
-		return "int"
-	case "positiveInteger", "nonNegativeInteger":
-		return "uint"
+		return "BooleanXML"
+
+	case "language":
+		return "LanguageXML"
+
+	case "Name":
+		return "NameXML"
+
+	case "token":
+		return "TokenXML"
+
+	case "duration":
+		return "DurationXML"
+
+	case "anyURI":
+		return "AnyURIXML"
+
+	case "normalizedString":
+		return "NormalizedStringXML"
+
+	case "short":
+		return "ShortIntXML"
+
+	case "long":
+		return "LongIntXML"
+
+	case "integer":
+		return "IntegerXML"
+
+	case "int":
+		return "IntXML"
+
+	case "positiveInteger":
+		return "PositiveIntegerXML"
+
+	case "nonNegativeInteger":
+		return "NonNegativeIntegerXML"
+
 	case "unsignedShort":
-		return "uint16"
+		return "UnsignedShortIntXML"
+
 	case "decimal":
-		return "float64"
+		return "DecimalXML"
+
 	case "date":
 		return "DateXSDType"
+
 	case "dateTime":
 		return "DateTimeXSDType"
+
 	case "time":
 		return "TimeXSDType"
+
+	case "string":
+		return "StringXML"
+
 	default:
 		return name
 	}
