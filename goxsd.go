@@ -331,13 +331,13 @@ func (b *builder) findType(name string) interface{} {
 		return "DecimalXML"
 
 	case "date":
-		return "DateXSDType"
+		return "DateXSD"
 
 	case "dateTime":
-		return "DateTimeXSDType"
+		return "DateTimeXSD"
 
 	case "time":
-		return "TimeXSDType"
+		return "TimeXSD"
 
 	case "string":
 		return "StringXML"

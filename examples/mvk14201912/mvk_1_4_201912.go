@@ -7,8 +7,8 @@ import "time"
 type (
 	AnyURIXML             string
 	BooleanXML            bool
-	DateTimeXSDType       time.Time
-	DateXSDType           time.Time
+	DateTimeXSD           time.Time
+	DateXSD               time.Time
 	DecimalXML            float64
 	DurationXML           time.Duration
 	Float64XML            float64
@@ -22,7 +22,7 @@ type (
 	PositiveIntegerXML    uint
 	ShortIntXML           int16
 	StringXML             string
-	TimeXSDType           time.Time
+	TimeXSD               time.Time
 	TokenXML              string
 	UnsignedShortIntXML   uint16
 )
@@ -30,8 +30,8 @@ type (
 // СписокРешений is generated from an XSD element.
 type СписокРешений struct {
 	ВерсияФормата           StringXML                   `xml:"ВерсияФормата"`
-	ДатаСписка              DateXSDType                 `xml:"ДатаСписка"`
-	ДатаПредыдущегоСписка   *DateXSDType                `xml:"ДатаПредыдущегоСписка,omitempty"`
+	ДатаСписка              DateXSD                     `xml:"ДатаСписка"`
+	ДатаПредыдущегоСписка   *DateXSD                    `xml:"ДатаПредыдущегоСписка,omitempty"`
 	СписокАктуальныхРешений СписокАктуальныхРешенийТип  `xml:"СписокАктуальныхРешений"`
 	СписокОтмененныхРешений *СписокОтмененныхРешенийТип `xml:"СписокОтмененныхРешений,omitempty"`
 }
@@ -45,7 +45,7 @@ type СписокАктуальныхРешенийТип struct {
 type РешениеТип struct {
 	ТипРешения      СправочникТип       `xml:"ТипРешения"`
 	НомерРешения    StringXML           `xml:"НомерРешения"`
-	ДатаРешения     DateXSDType         `xml:"ДатаРешения"`
+	ДатаРешения     DateXSD             `xml:"ДатаРешения"`
 	Орган           StringXML           `xml:"Орган"`
 	ВидРешения      СправочникТип       `xml:"ВидРешения"`
 	СписокСубъектов *СписокСубъектовТип `xml:"СписокСубъектов,omitempty"`
@@ -114,7 +114,7 @@ type ФЛТип struct {
 	Имя                  *StringXML                 `xml:"Имя,omitempty"`
 	Отчество             *StringXML                 `xml:"Отчество,omitempty"`
 	ФИОЛат               *StringXML                 `xml:"ФИОЛат,omitempty"`
-	ДатаРождения         *DateXSDType               `xml:"ДатаРождения,omitempty"`
+	ДатаРождения         *DateXSD                   `xml:"ДатаРождения,omitempty"`
 	ГодРождения          *StringXML                 `xml:"ГодРождения,omitempty"`
 	МестоРождения        *StringXML                 `xml:"МестоРождения,omitempty"`
 	ИНН                  *StringXML                 `xml:"ИНН,omitempty"`
@@ -134,9 +134,9 @@ type ДокументТип struct {
 	Серия                   *StringXML    `xml:"Серия,omitempty"`
 	Номер                   *StringXML    `xml:"Номер,omitempty"`
 	ОрганВыдачи             *StringXML    `xml:"ОрганВыдачи,omitempty"`
-	ДатаВыдачи              *DateXSDType  `xml:"ДатаВыдачи,omitempty"`
-	ДатаС                   *DateXSDType  `xml:"ДатаС,omitempty"`
-	ДатаПо                  *DateXSDType  `xml:"ДатаПо,omitempty"`
+	ДатаВыдачи              *DateXSD      `xml:"ДатаВыдачи,omitempty"`
+	ДатаС                   *DateXSD      `xml:"ДатаС,omitempty"`
+	ДатаПо                  *DateXSD      `xml:"ДатаПо,omitempty"`
 	ПризнакДействительности *BooleanXML   `xml:"ПризнакДействительности,omitempty"`
 }
 
@@ -151,7 +151,7 @@ type ДрНаименованиеФЛТип struct{}
 // ЮЛТип is generated from an XSD element.
 type ЮЛТип struct {
 	НаименованиеЛат      *StringXML                 `xml:"НаименованиеЛат,omitempty"`
-	ДатаРегистрации      *DateXSDType               `xml:"ДатаРегистрации,omitempty"`
+	ДатаРегистрации      *DateXSD                   `xml:"ДатаРегистрации,omitempty"`
 	МестоРегистрации     *StringXML                 `xml:"МестоРегистрации,omitempty"`
 	ОГРН                 *StringXML                 `xml:"ОГРН,omitempty"`
 	СписокДрНаименований *СписокДрНаименованийЮЛТип `xml:"СписокДрНаименований,omitempty"`

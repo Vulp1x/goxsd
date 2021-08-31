@@ -7,8 +7,8 @@ import "time"
 type (
 	AnyURIXML             string
 	BooleanXML            bool
-	DateTimeXSDType       time.Time
-	DateXSDType           time.Time
+	DateTimeXSD           time.Time
+	DateXSD               time.Time
 	DecimalXML            float64
 	DurationXML           time.Duration
 	Float64XML            float64
@@ -22,7 +22,7 @@ type (
 	PositiveIntegerXML    uint
 	ShortIntXML           int16
 	StringXML             string
-	TimeXSDType           time.Time
+	TimeXSD               time.Time
 	TokenXML              string
 	UnsignedShortIntXML   uint16
 )
@@ -31,8 +31,8 @@ type (
 type Submission struct {
 	SchemaVersion StringXML   `xml:"schema_version,omitempty,attr"`
 	ResubmitOf    StringXML   `xml:"resubmit_of,omitempty,attr"`
-	Submitted     DateXSDType `xml:"submitted,omitempty,attr"`
-	LastUpdate    DateXSDType `xml:"last_update,omitempty,attr"`
+	Submitted     DateXSD     `xml:"submitted,omitempty,attr"`
+	LastUpdate    DateXSD     `xml:"last_update,omitempty,attr"`
 	Status        StringXML   `xml:"status,omitempty,attr"`
 	SubmissionID  TokenXML    `xml:"submission_id,attr"`
 	Description   Description `xml:"Description"`
@@ -103,7 +103,7 @@ type Name struct {
 
 // Hold is generated from an XSD element.
 type Hold struct {
-	ReleaseDate DateXSDType `xml:"release_date,attr"`
+	ReleaseDate DateXSD `xml:"release_date,attr"`
 }
 
 // SubmissionSoftware is generated from an XSD element.
@@ -153,7 +153,7 @@ type Release struct{}
 
 // SetReleaseDate is generated from an XSD element.
 type SetReleaseDate struct {
-	ReleaseDate DateXSDType `xml:"release_date,attr"`
+	ReleaseDate DateXSD `xml:"release_date,attr"`
 }
 
 // TypeIDentifier is generated from an XSD element.
@@ -333,7 +333,7 @@ type Relevance struct {
 // TypePublication is generated from an XSD element.
 type TypePublication struct {
 	ID                 StringXML           `xml:"id,attr"`
-	Date               DateTimeXSDType     `xml:"date,attr"`
+	Date               DateTimeXSD         `xml:"date,attr"`
 	Status             TokenXML            `xml:"status,attr"`
 	AuthorSet          *TypeAuthorSet      `xml:"AuthorSet,omitempty"`
 	Reference          *StringXML          `xml:"Reference,omitempty"`

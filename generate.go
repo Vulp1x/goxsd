@@ -119,8 +119,8 @@ package %s
 type (
 	AnyURIXML       			string
 	BooleanXML      			bool
-	DateTimeXSDType 			time.Time
-	DateXSDType     			time.Time
+	DateTimeXSD 			time.Time
+	DateXSD     			time.Time
 	DecimalXML      			float64
 	DurationXML     			time.Duration
 	Float64XML      			float64
@@ -134,7 +134,7 @@ type (
 	PositiveIntegerXML    uint
 	ShortIntXML           int16
 	StringXML             string
-	TimeXSDType           time.Time
+	TimeXSD           time.Time
 	TokenXML              string
 	UnsignedShortIntXML   uint16
 )
@@ -285,7 +285,7 @@ func goPrimitiveType(t string) bool {
 		"int16", "ShortIntXML",
 		"uint", "PositiveIntegerXML", "NonNegativeIntegerXML", "UnsignedShortIntXML",
 		"float64", "DecimalXML", "Float64XML",
-		"time.Time", "DateTimeXSDType", "DateXSDType", "TimeXSDType":
+		"time.Time", "DateTimeXSD", "DateXSD", "TimeXSD":
 		return true
 	}
 
