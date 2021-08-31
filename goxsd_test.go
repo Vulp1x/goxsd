@@ -260,8 +260,7 @@ func TestBuildXmlElem(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(strconv.Itoa(tt.line), func(t *testing.T) {
-			////////////////////////////////////////////////////////////////////////////////
-			// t.Parallel()
+			// t.Parallel() // TODO: Enable me after removing `var parsedFiles map[string]struct{}` ~~~~<dkutkevich@ozon.ru>
 			link := fmt.Sprintf("%s:%d", testFile, tt.line)
 
 			schemas, err := parse(strings.NewReader(tt.xsd), "test")
@@ -303,8 +302,7 @@ func TestGenerateGo(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(strconv.Itoa(tt.line), func(t *testing.T) {
-			////////////////////////////////////////////////////////////////////////////////
-			// t.Parallel()
+			// t.Parallel() // TODO: Enable me after removing `var parsedFiles map[string]struct{}` ~~~~<dkutkevich@ozon.ru>
 			link := fmt.Sprintf("%s:%d", testFile, tt.line)
 
 			var out bytes.Buffer
