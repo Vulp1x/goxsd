@@ -17,7 +17,7 @@ type (
 	LanguageXML           string
 	LongIntXML            int64
 	NameXML               string
-	NonNegativeIntegerXML uint
+	NonNegativeIntegerXML string
 	NormalizedStringXML   string
 	PositiveIntegerXML    uint
 	ShortIntXML           int16

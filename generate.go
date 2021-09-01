@@ -117,24 +117,24 @@ func (g Generator) Do(out io.Writer, roots []*xmlTree) error {
 package %s
 
 type (
-	AnyURIXML       			string
-	BooleanXML      			bool
-	DateTimeXSD 			time.Time
-	DateXSD     			time.Time
-	DecimalXML      			float64
-	DurationXML     			time.Duration
-	Float64XML      			float64
-	IntXML          			int
-	IntegerXML      			int
-	LanguageXML     			string
-	LongIntXML         		int64
+	AnyURIXML             string
+	BooleanXML            bool
+	DateTimeXSD           time.Time
+	DateXSD               time.Time
+	DecimalXML            float64
+	DurationXML           time.Duration
+	Float64XML            float64
+	IntXML                int
+	IntegerXML            int
+	LanguageXML           string
+	LongIntXML            int64
 	NameXML               string
-	NonNegativeIntegerXML uint
+	NonNegativeIntegerXML string
 	NormalizedStringXML   string
 	PositiveIntegerXML    uint
 	ShortIntXML           int16
 	StringXML             string
-	TimeXSD           time.Time
+	TimeXSD               time.Time
 	TokenXML              string
 	UnsignedShortIntXML   uint16
 )
