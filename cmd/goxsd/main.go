@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/alexsergivan/transliterator"
+	"github.com/alexsergivan/transliterator/languages"
 	"github.com/danil/goxsd"
 )
 
@@ -67,12 +68,7 @@ func main() {
 
 	bldr := goxsd.NewBuilder(s)
 
-	var translate func(string) string
-
-	if strings.TrimSpace(language) != "" {
-		trans := transliterator.NewTransliterator(nil)
-		translate = func(s string) string { return trans.Transliterate(s, language) }
-	}
+	translate := initTranslator(language)
 
 	gen := goxsd.Generator{
 		Package:    pckg,
@@ -91,4 +87,23 @@ func main() {
 
 		os.Exit(1)
 	}
+}
+
+func initTranslator(language string) func(string) string {
+	if strings.TrimSpace(language) == "" {
+		return nil
+	}
+
+	var customOverrides *map[string]map[rune]string
+	if strings.ToLower(language) == "ru" {
+		langOverride := languages.NewLanguageOverrides()
+		ruMapOverride := languages.RU
+		ruMapOverride['ь'] = "" // otherwise, it will be interpreted as a single quote  symbol "'"
+		langOverride.AddLanguageOverride("RU", ruMapOverride)
+		customOverrides = &langOverride.Overrides
+	}
+
+	trans := transliterator.NewTransliterator(customOverrides)
+
+	return func(s string) string { return trans.Transliterate(s, language) }
 }
