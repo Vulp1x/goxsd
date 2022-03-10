@@ -9,7 +9,7 @@ import (
 
 	"github.com/alexsergivan/transliterator"
 	"github.com/alexsergivan/transliterator/languages"
-	"github.com/danil/goxsd"
+	"github.com/vulp1x/goxsd"
 )
 
 //go:generate sh -c "go run . -p ncbisubmission ../../examples/ncbisubmission/submission-comb.xsd > ../../examples/ncbisubmission/ncbi_submission.go"

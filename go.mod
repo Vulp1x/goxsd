@@ -1,4 +1,4 @@
-module github.com/danil/goxsd
+module github.com/vulp1x/goxsd
 
 go 1.16
 

@@ -5,8 +5,8 @@ import (
 	_ "embed"
 	"testing"
 
-	"github.com/danil/goxsd"
 	"github.com/google/go-cmp/cmp"
+	"github.com/vulp1x/goxsd"
 )
 
 //go:embed mvk_1_4_201912.go

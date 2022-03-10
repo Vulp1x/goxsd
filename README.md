@@ -1,7 +1,7 @@
 # goxsd
 
 [![Build Status](https://cloud.drone.io/api/badges/danil/goxsd/status.svg)](https://cloud.drone.io/danil/goxsd)
-[![Go Reference](https://pkg.go.dev/badge/github.com/danil/goxsd.svg)](https://pkg.go.dev/github.com/danil/goxsd)
+[![Go Reference](https://pkg.go.dev/badge/github.com/vulp1x/goxsd.svg)](https://pkg.go.dev/github.com/vulp1x/goxsd)
 
 Goxsd is a tool for generating XML decoding Go structs from an [XSD schema](https://www.w3.org/TR/xmlschema11-1) specification. It does not yet implement the full XSD specificaiton, but goes sufficiently far to be useful for at least some use cases.
 

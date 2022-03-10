@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/alexsergivan/transliterator"
-	"github.com/danil/goxsd"
 	"github.com/google/go-cmp/cmp"
+	"github.com/vulp1x/goxsd"
 )
 
 //go:embed f311_sfc0_512.go
